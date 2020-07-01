@@ -1,4 +1,5 @@
 name: MMORPG Core
 version: ${project.version}
-main: me.jwhz.MMORPGCore
+main: me.jwhz.mmorpgcore.MMORPGCore
 website: https://www.mc-market.org/members/91893/
+author: JakeDev
