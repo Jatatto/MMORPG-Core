@@ -65,7 +65,7 @@ public abstract class CommandBase extends ManagerObject<String> implements Comma
 
         String command();
 
-        String permission() default "CampaignReborn.user";
+        String permission() default "MMORPGCore.user";
 
         boolean onlyPlayers() default true;
 

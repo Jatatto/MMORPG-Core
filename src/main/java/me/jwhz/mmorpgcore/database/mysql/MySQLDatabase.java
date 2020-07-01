@@ -38,7 +38,6 @@ public class MySQLDatabase extends ConfigFile implements IDatabase {
      *  MySQL Connection
      */
 
-
     public void closeConnection(){
 
         try {

@@ -9,13 +9,10 @@ import java.io.IOException;
 public class ConfigFile {
 
     protected MMORPGCore core = MMORPGCore.getInstance();
-    private String fileName;
     private File file;
     protected YamlConfiguration yamlConfiguration;
 
     public ConfigFile(String fileName) {
-
-        this.fileName = fileName;
 
         if (!core.getDataFolder().exists())
             core.getDataFolder().mkdir();

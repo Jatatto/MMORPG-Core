@@ -8,7 +8,7 @@ import java.util.List;
 
 public abstract class Manager<T extends ManagerObject> extends ConfigFile {
 
-    protected ArrayList<T> list = new ArrayList<T>();
+    protected ArrayList<T> list = new ArrayList<>();
 
     protected MMORPGCore core = MMORPGCore.getInstance();
 
