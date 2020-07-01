@@ -1,0 +1,4 @@
+name: MMORPG Core
+version: ${project.version}
+main: me.jwhz.MMORPGCore
+website: https://www.mc-market.org/members/91893/
