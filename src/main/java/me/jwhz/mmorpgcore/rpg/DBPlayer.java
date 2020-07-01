@@ -48,19 +48,13 @@ public class DBPlayer extends ManagerObject<UUID> {
 
     public static DBPlayer getPlayer(Player player) {
 
-        return MMORPGCore.getInstance().playerManager.getList().stream().filter(dbPlayer -> dbPlayer.getPlayer().equals(player)).findFirst().orElse(null);
+        return getPlayer(player.getUniqueId());
 
     }
 
     public static DBPlayer getPlayer(UUID id) {
 
         return MMORPGCore.getInstance().playerManager.getList().stream().filter(dbPlayer -> dbPlayer.id.equals(id)).findFirst().orElse(null);
-
-    }
-
-    public static DBPlayer getPlayer(String name) {
-
-        return MMORPGCore.getInstance().playerManager.getList().stream().filter(player -> player.name.equalsIgnoreCase(name)).findFirst().orElse(null);
 
     }
 
