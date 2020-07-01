@@ -1,0 +1,2 @@
+uri: 'mongodb+srv://username:drowssap@cluster0.ybf3f.mongodb.net/profiles?retryWrites=true&w=majority'
+database: 'profiles'
