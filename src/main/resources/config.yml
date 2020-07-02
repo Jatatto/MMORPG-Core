@@ -1,0 +1,8 @@
+profiles:
+    new profile spawn:
+        x: 5
+        y: 100
+        z: 5
+        yaw: 1
+        pitch: 1
+        world: World

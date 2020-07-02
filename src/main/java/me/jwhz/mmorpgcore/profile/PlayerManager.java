@@ -1,7 +1,7 @@
-package me.jwhz.mmorpgcore.rpg;
+package me.jwhz.mmorpgcore.profile;
 
-import com.mongodb.BasicDBObject;
 import me.jwhz.mmorpgcore.manager.Manager;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,21 +39,38 @@ public class PlayerManager extends Manager<DBPlayer> implements Listener {
 
         DBPlayer dbPlayer = new DBPlayer(player);
 
+        Document document = core.database.getPlayer(player.getUniqueId());
+
+        if (document == null)
+            document = new Document("uuid", player.getUniqueId().toString());
+
         dbPlayer.loadData(
-                core.database.isRegistered(player.getUniqueId()) ?
-                        core.database.getPlayer(player.getUniqueId()) :
-                        new BasicDBObject("uuid", player.getUniqueId())
+                document
         );
 
-        getList().add(new DBPlayer(player));
+        getList().add(dbPlayer);
+
+        if (dbPlayer.getProfiles().size() == 0) {
+
+            dbPlayer.createProfile("default");
+
+            dbPlayer.setCurrentProfile(dbPlayer.getProfile("default"));
+
+        } else if (dbPlayer.getLastPlayed() != null)
+            dbPlayer.setCurrentProfile(dbPlayer.getLastPlayed());
 
     }
 
     public void unloadPlayer(Player player) {
 
-        DBPlayer dbPlayer = getList().stream().filter(db -> db.getPlayer().equals(player)).findFirst().orElse(null);
+        DBPlayer dbPlayer = DBPlayer.getPlayer(player);
 
-        core.database.collection.insert(dbPlayer.getData());
+        if (dbPlayer.getCurrentProfile() != null)
+            dbPlayer.getCurrentProfile().unloadProfile();
+
+        dbPlayer.save();
+
+        getList().remove(dbPlayer);
 
     }
 

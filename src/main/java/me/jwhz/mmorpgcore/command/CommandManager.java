@@ -1,5 +1,6 @@
 package me.jwhz.mmorpgcore.command;
 
+import me.jwhz.mmorpgcore.command.commands.ProfileCMD;
 import me.jwhz.mmorpgcore.config.ConfigHandler;
 import me.jwhz.mmorpgcore.manager.Manager;
 import org.bukkit.command.PluginCommand;
@@ -14,9 +15,11 @@ public class CommandManager extends Manager<CommandBase> {
         ConfigHandler.setPresets(this);
         ConfigHandler.reload(this);
 
-        for(CommandBase commandInfo : getList()){
+        getList().add(new ProfileCMD());
 
-            PluginCommand command = commandInfo.core.getCommand(commandInfo.getAnnotationInfo().command());
+        for (CommandBase commandInfo : getList()) {
+
+            PluginCommand command = commandInfo.core.getCommand(commandInfo.getAnnotationInfo().value());
 
             command.setExecutor(commandInfo);
             command.setTabCompleter(commandInfo);
@@ -25,8 +28,6 @@ public class CommandManager extends Manager<CommandBase> {
 
             ConfigHandler.setPresets(commandInfo, getFile());
             ConfigHandler.reload(commandInfo, getFile());
-
-            list.add(commandInfo);
 
         }
 

@@ -1,10 +1,9 @@
 package me.jwhz.mmorpgcore;
 
 import me.jwhz.mmorpgcore.command.CommandManager;
-import me.jwhz.mmorpgcore.database.IDatabase;
-import me.jwhz.mmorpgcore.database.mysql.MongoDatabase;
+import me.jwhz.mmorpgcore.database.MongoDB;
 import me.jwhz.mmorpgcore.manager.Manager;
-import me.jwhz.mmorpgcore.rpg.PlayerManager;
+import me.jwhz.mmorpgcore.profile.PlayerManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -14,25 +13,28 @@ public final class MMORPGCore extends JavaPlugin {
 
     private static MMORPGCore instance;
 
-    public MongoDatabase database;
+    public MongoDB database;
 
     private List<Manager> managers;
     public CommandManager commandManager;
     public PlayerManager playerManager;
+    public Config config;
 
     @Override
     public void onEnable() {
 
         instance = this;
 
-        this.database = new MongoDatabase();
+        this.database = new MongoDB();
 
-        database = new MongoDatabase();
+        database = new MongoDB();
 
         managers = new ArrayList<>();
 
         managers.add((commandManager = new CommandManager()));
         managers.add((playerManager = new PlayerManager()));
+
+        this.config = new Config(this);
 
         managers.forEach(Manager::onEnable);
 
@@ -43,11 +45,15 @@ public final class MMORPGCore extends JavaPlugin {
 
         managers.forEach(Manager::onDisable);
 
+        database.mongoClient.close();
+
     }
 
     public void onReload() {
 
         managers.forEach(Manager::onReload);
+
+        reloadConfig();
 
     }
 

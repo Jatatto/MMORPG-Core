@@ -24,7 +24,7 @@ public abstract class CommandBase extends ManagerObject<String> implements Comma
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
 
-        if (annotationInfo.command().equalsIgnoreCase(command.getName())) {
+        if (annotationInfo.value().equalsIgnoreCase(command.getName())) {
 
             if (annotationInfo.onlyPlayers() && !(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cOnly players can use this command!"));
@@ -42,7 +42,7 @@ public abstract class CommandBase extends ManagerObject<String> implements Comma
     @Override
     public String getIdentifier() {
 
-        return annotationInfo.command();
+        return annotationInfo.value();
 
     }
 
@@ -52,18 +52,12 @@ public abstract class CommandBase extends ManagerObject<String> implements Comma
 
     }
 
-    protected String c(String s) {
-
-        return ChatColor.translateAlternateColorCodes('&', s);
-
-    }
-
     public abstract void onCommand(CommandSender sender, String[] args);
 
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Info {
 
-        String command();
+        String value();
 
         String permission() default "MMORPGCore.user";
 
