@@ -35,6 +35,21 @@ public class PlayerManager extends Manager<DBPlayer> implements Listener {
 
     }
 
+    public int getMaximumProfiles(Player player){
+
+        int profileCap = 1;
+
+        if(player.isOp() || player.hasPermission(""))
+            return Integer.MAX_VALUE;
+
+        for(int i = 2; i < 10; i ++)
+            if(player.hasPermission("MMORPGCore.user.profiles-limit." + i))
+                profileCap = i;
+
+        return profileCap;
+
+    }
+
     public void loadPlayer(Player player) {
 
         DBPlayer dbPlayer = new DBPlayer(player);

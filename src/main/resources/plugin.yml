@@ -3,5 +3,6 @@ version: ${project.version}
 main: me.jwhz.mmorpgcore.MMORPGCore
 website: https://www.mc-market.org/members/91893/
 author: JakeDev
+api-version: 1.13
 commands:
     profile:

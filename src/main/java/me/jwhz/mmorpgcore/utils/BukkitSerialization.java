@@ -1,10 +1,15 @@
 package me.jwhz.mmorpgcore.utils;
 
+import me.jwhz.mmorpgcore.utils.materials.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
@@ -13,6 +18,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.DoubleBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Credits:
@@ -174,7 +183,7 @@ public class BukkitSerialization {
 
     }
 
-    public static Location locationFromString(String string){
+    public static Location locationFromString(String string) {
 
         String[] parts = string.split(",");
 
@@ -188,6 +197,100 @@ public class BukkitSerialization {
                 Float.parseFloat(parts[5])
 
         );
+
+    }
+
+    public static Map<String, Object> convertItem(ItemStack item) {
+
+        Map<String, Object> section = new HashMap<>();
+
+        section.put("material", UMaterial.match(item).getVersionName());
+        section.put("amount", item.getAmount());
+
+        if (item.hasItemMeta()) {
+
+            ItemMeta itemMeta = item.getItemMeta();
+
+            section.put("name", itemMeta.getDisplayName());
+            section.put("lore", itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList<String>());
+
+            List<String> enchants = new ArrayList<>();
+
+            if (itemMeta.hasEnchants())
+                for (Map.Entry<Enchantment, Integer> pair : itemMeta.getEnchants().entrySet())
+                    enchants.add(pair.getKey().getName() + "," + pair.getValue());
+
+            section.put("enchants", enchants);
+
+            section.put("custom model", itemMeta.hasCustomModelData() ? itemMeta.getCustomModelData() : -1);
+
+        }
+
+        return section;
+
+    }
+
+    public static ItemStack convertMap(Map<String, Object> section) {
+
+        ItemStack item = UMaterial.match(String.valueOf(section.get("material"))).getItemStack();
+        item.setAmount((Integer) section.get("amount"));
+
+        ItemMeta meta = item.getItemMeta();
+
+        if (section.containsKey("name"))
+            meta.setDisplayName(String.valueOf(section.get("name")));
+
+        if (section.containsKey("lore"))
+            meta.setLore((List<String>) section.get("lore"));
+
+        if (section.containsKey("enchants"))
+            for (String enchant : (List<String>) section.get("enchants")) {
+
+                String[] parts = enchant.split(",");
+
+                meta.addEnchant(Enchantment.getByName(parts[0]), Integer.parseInt(parts[1]), true);
+
+            }
+
+        if (section.containsKey("custom model") && (int)section.get("custom model") != -1)
+            meta.setCustomModelData((Integer) section.get("custom model"));
+
+        item.setItemMeta(meta);
+
+        return item;
+
+
+    }
+
+    public static ItemStack convertSection(ConfigurationSection section) {
+
+        ItemStack item = UMaterial.match(section.getString("material")).getItemStack();
+        item.setAmount(section.getInt("amount"));
+
+        ItemMeta meta = item.getItemMeta();
+
+        if (section.contains("name"))
+            meta.setDisplayName(section.getString("name"));
+
+        if (section.contains("lore"))
+            meta.setLore(section.getStringList("lore"));
+
+        if (section.contains("enchants"))
+            for (String enchant : section.getStringList("enchants")) {
+
+                String[] parts = enchant.split(",");
+
+                meta.addEnchant(Enchantment.getByName(parts[0]), Integer.parseInt(parts[1]), true);
+
+            }
+
+        if (section.contains("custom model") && section.getInt("custom model") != -1)
+            meta.setCustomModelData(section.getInt("custom model"));
+
+        item.setItemMeta(meta);
+
+        return item;
+
 
     }
 

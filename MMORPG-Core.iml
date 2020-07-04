@@ -30,5 +30,6 @@
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-sync:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:bson:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-core:4.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: me.clip:placeholderapi:2.8.1" level="project" />
   </component>
 </module>

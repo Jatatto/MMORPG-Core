@@ -6,7 +6,9 @@ import me.jwhz.mmorpgcore.MMORPGCore;
 import me.jwhz.mmorpgcore.utils.BukkitSerialization;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
@@ -46,15 +48,92 @@ public class Profile {
 
     }
 
+    public Document getExp() {
+
+        return (Document) getPlayerStats().get("xp");
+
+    }
+
+    public List<Document> getPotions() {
+
+        return (List<Document>) getPlayerStats().get("potions");
+
+    }
+
+    public ItemStack[] getEnderChest() {
+
+        try {
+
+            return BukkitSerialization.itemStackArrayFromBase64(getPlayerStats().getString("enderchest"));
+
+        } catch (Exception ignored) {
+        }
+
+        return null;
+
+    }
+
+    public ItemStack[] getInventory() {
+
+        try {
+
+            return BukkitSerialization.itemStackArrayFromBase64(getPlayerStats().getString("inventory"));
+
+        } catch (Exception ignored) {
+        }
+
+        return null;
+
+    }
+
+    public Document getPlayerStats() {
+
+        return (Document) data.get("player stats");
+
+    }
+
+    public Location getLocation() {
+
+        return BukkitSerialization.locationFromString(getPlayerStats().getString("location"));
+
+    }
+
+    public void unloadProfile() {
+
+        save();
+
+        Player player = Bukkit.getPlayer(getOwner());
+
+        player.getInventory().clear();
+        player.setHealth(20);
+        player.setMaxHealth(20);
+        player.setFoodLevel(20);
+        player.setTotalExperience(0);
+        player.setLevel(0);
+
+        Iterator<PotionEffect> potions = player.getActivePotionEffects().iterator();
+
+        while (potions.hasNext()) {
+
+            player.removePotionEffect(potions.next().getType());
+
+            potions.remove();
+
+        }
+
+        player.getEnderChest().clear();
+
+    }
+
     public void loadProfile() {
 
         Player player = Bukkit.getPlayer(getOwner());
 
         if (data.containsKey("player stats")) {
 
-            Document playerStats = (Document) data.get("player stats");
+            Document playerStats = getPlayerStats();
 
-            player.teleport(playerStats.containsKey("location") ? BukkitSerialization.locationFromString(playerStats.getString("location")) : MMORPGCore.getInstance().config.getNewProfileSpawn());
+            player.teleport(playerStats.containsKey("location") ? getLocation() : MMORPGCore.getInstance().config.getNewProfileSpawn());
 
             player.setMaxHealth(playerStats.get("max health", 20.0));
             player.setHealth(playerStats.get("health", 20.0));
@@ -63,7 +142,7 @@ public class Profile {
 
             if (playerStats.containsKey("xp")) {
 
-                Document xp = (Document) playerStats.get("xp");
+                Document xp = getExp();
 
                 player.setLevel(xp.getInteger("xp level"));
                 player.setExp(Float.valueOf(xp.getString("current xp")));
@@ -78,40 +157,12 @@ public class Profile {
             player.getEnderChest().clear();
 
             if (playerStats.containsKey("enderchest"))
-                try {
-                    player.getEnderChest().setContents(BukkitSerialization.itemStackArrayFromBase64(playerStats.getString("enderchest")));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                player.getEnderChest().setContents(getEnderChest());
 
             player.getInventory().clear();
-            player.getInventory().setArmorContents(new ItemStack[4]);
 
-            if (playerStats.containsKey("inventory")) {
-
-                try {
-
-                    player.getInventory().setContents(BukkitSerialization.itemStackArrayFromBase64(playerStats.getString("inventory")));
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            if (playerStats.containsKey("armor")) {
-
-                try {
-
-                    player.getInventory().setArmorContents(BukkitSerialization.itemStackArrayFromBase64(playerStats.getString("armor")));
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-
-                }
-
-            }
+            if (playerStats.containsKey("inventory"))
+                player.getInventory().setContents(getInventory());
 
             if (playerStats.containsKey("potions"))
 
@@ -133,34 +184,6 @@ public class Profile {
 
     }
 
-    public void unloadProfile() {
-
-        save();
-
-        Player player = Bukkit.getPlayer(getOwner());
-
-        player.getInventory().clear();
-        player.getInventory().setArmorContents(new ItemStack[4]);
-        player.setHealth(20);
-        player.setMaxHealth(20);
-        player.setFoodLevel(20);
-        player.setTotalExperience(0);
-        player.setLevel(0);
-
-        Iterator<PotionEffect> potions = player.getActivePotionEffects().iterator();
-
-        while (potions.hasNext()) {
-
-            player.removePotionEffect(potions.next().getType());
-
-            potions.remove();
-
-        }
-
-        player.getEnderChest().clear();
-
-    }
-
     public void save() {
 
         Player player = Bukkit.getPlayer(getOwner());
@@ -169,7 +192,6 @@ public class Profile {
 
         playerStats.put("enderchest", BukkitSerialization.itemStackArrayToBase64(player.getEnderChest().getContents()));
         playerStats.put("inventory", BukkitSerialization.itemStackArrayToBase64(player.getInventory().getContents()));
-        playerStats.put("armor", BukkitSerialization.itemStackArrayToBase64(player.getInventory().getArmorContents()));
         playerStats.put("health", player.getHealth());
         playerStats.put("max health", player.getMaxHealth());
         playerStats.put("food", player.getFoodLevel());
@@ -216,3 +238,4 @@ public class Profile {
     }
 
 }
+

@@ -1,12 +1,18 @@
 package me.jwhz.mmorpgcore.config;
 
+import me.jwhz.mmorpgcore.utils.BukkitSerialization;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ConfigHandler {
 
@@ -29,7 +35,11 @@ public class ConfigHandler {
 
                     Object value = configuration.get(configAnnotation.value());
 
-                    if (value instanceof String)
+                    if (f.getType().isInstance(new ItemStack(Material.STONE)))
+                        f.set(clazz, BukkitSerialization.convertSection(configuration.getConfigurationSection(configAnnotation.value())));
+                    else if (f.getType().isInstance(new HashMap<>()))
+                        f.set(clazz, toMap(configuration.getConfigurationSection(configAnnotation.value())));
+                    else if (value instanceof String)
                         f.set(clazz, ChatColor.translateAlternateColorCodes('&', String.valueOf(value)));
                     else
                         f.set(clazz, value);
@@ -40,6 +50,17 @@ public class ConfigHandler {
             }
 
         }
+
+    }
+
+    private static Map<String, String> toMap(ConfigurationSection section) {
+
+        Map<String, String> map = new HashMap<>();
+
+        for (String key : section.getKeys(false))
+            map.put(key, section.getString(key));
+
+        return map;
 
     }
 
@@ -58,7 +79,9 @@ public class ConfigHandler {
                 try {
                     Object value = f.get(clazz);
 
-                    if (!configuration.isSet(configAnnotation.value()))
+                    if (value instanceof ItemStack)
+                        configuration.set(configAnnotation.value(), BukkitSerialization.convertItem((ItemStack) value));
+                    else if (!configuration.isSet(configAnnotation.value()))
                         configuration.set(configAnnotation.value(), value);
 
                 } catch (Exception e) {

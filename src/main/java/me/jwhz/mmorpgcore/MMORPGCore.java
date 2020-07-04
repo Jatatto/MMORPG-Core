@@ -4,6 +4,8 @@ import me.jwhz.mmorpgcore.command.CommandManager;
 import me.jwhz.mmorpgcore.database.MongoDB;
 import me.jwhz.mmorpgcore.manager.Manager;
 import me.jwhz.mmorpgcore.profile.PlayerManager;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -14,6 +16,9 @@ public final class MMORPGCore extends JavaPlugin {
     private static MMORPGCore instance;
 
     public MongoDB database;
+    public boolean placeholderAPI;
+
+    public MMORPGCorePlaceholderExpansion mmorpgCorePlaceholderExpansion;
 
     private List<Manager> managers;
     public CommandManager commandManager;
@@ -26,6 +31,7 @@ public final class MMORPGCore extends JavaPlugin {
         instance = this;
 
         this.database = new MongoDB();
+        this.placeholderAPI = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
 
         database = new MongoDB();
 
@@ -36,12 +42,18 @@ public final class MMORPGCore extends JavaPlugin {
 
         this.config = new Config(this);
 
+        if (this.placeholderAPI)
+            mmorpgCorePlaceholderExpansion = new MMORPGCorePlaceholderExpansion(this);
+
         managers.forEach(Manager::onEnable);
 
     }
 
     @Override
     public void onDisable() {
+
+        for(Player player : Bukkit.getOnlinePlayers())
+            player.kickPlayer("Reloading core...");
 
         managers.forEach(Manager::onDisable);
 
