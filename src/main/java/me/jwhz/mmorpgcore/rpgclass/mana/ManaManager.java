@@ -1,6 +1,7 @@
 package me.jwhz.mmorpgcore.rpgclass.mana;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import me.jwhz.mmorpgcore.events.ManaRegenerationEvent;
 import me.jwhz.mmorpgcore.manager.Manager;
 import me.jwhz.mmorpgcore.profile.DBPlayer;
 import me.jwhz.mmorpgcore.profile.profiledata.PlayerStats;
@@ -31,7 +32,10 @@ public class ManaManager extends Manager {
                     playerStats = dbPlayer.getCurrentProfile().getPlayerStats();
                     manaSettings = dbPlayer.getCurrentProfile().getProfileSettings().getManaSettings();
 
-                    playerStats.setMana(Math.min(playerStats.getMana() + manaSettings.getManaRegeneration(), manaSettings.getMaxMana()));
+                    ManaRegenerationEvent manaRegenerationEvent = new ManaRegenerationEvent(dbPlayer, manaSettings.getManaRegeneration());
+
+                    if (!manaRegenerationEvent.isCancelled())
+                        playerStats.setMana(Math.min(playerStats.getMana() + manaRegenerationEvent.getRegenerationAmount(), manaSettings.getMaxMana()));
 
                     PacketPlayOutChat packet = new PacketPlayOutChat(new ChatComponentText(
                             PlaceholderAPI.setPlaceholders(player, core.messages.manaBar)

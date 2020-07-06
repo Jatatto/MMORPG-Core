@@ -1,31 +1,32 @@
 package me.jwhz.mmorpgcore.profile;
 
+import me.jwhz.mmorpgcore.MMORPGCore;
 import me.jwhz.mmorpgcore.profile.profiledata.PlayerStats;
-import me.jwhz.mmorpgcore.profile.profiledata.ProfileData;
 import me.jwhz.mmorpgcore.profile.profiledata.ProfileSettings;
+import me.jwhz.mmorpgcore.rpgclass.RPGClass;
+import me.jwhz.mmorpgcore.rpgclass.passive.Passive;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class Profile {
 
+    private MMORPGCore core = MMORPGCore.getInstance();
+
     private Document data;
-    private List<ProfileData> profileDatas;
     private ProfileSettings profileSettings;
     private PlayerStats playerStats;
+    private List<Passive> passives;
 
     public Profile(Document data) {
 
         this.data = data;
 
-        this.profileDatas = new ArrayList<>();
-
-        profileDatas.add((profileSettings = new ProfileSettings(this, data.containsKey("profile settings") ? (Document) data.get("profile settings") : new Document())));
-        profileDatas.add((playerStats = new PlayerStats(this, data.containsKey("player stats") ? (Document) data.get("player stats") : new Document())));
+        profileSettings = new ProfileSettings(this, data.containsKey("profile settings") ? (Document) data.get("profile settings") : new Document());
+        playerStats = new PlayerStats(this, data.containsKey("player stats") ? (Document) data.get("player stats") : new Document());
 
     }
 
@@ -47,6 +48,37 @@ public class Profile {
 
     }
 
+    public List<Passive> getPassives() {
+
+        return passives;
+
+    }
+
+    public RPGClass getRPGClass() {
+
+        if (data.containsKey("rpgclass")) {
+
+            RPGClass rpgClass = core.rpgClassManager.getRPGClass(data.getString("rpgclass"));
+
+            if (rpgClass != null)
+                passives = rpgClass.getPassives();
+
+            return rpgClass;
+
+        }
+
+        return null;
+
+    }
+
+    public void setRPGClass(RPGClass rpgClass) {
+
+        data.put("rpgclass", rpgClass.getClassName());
+
+        this.passives = rpgClass.getPassives();
+
+    }
+
     public ProfileSettings getProfileSettings() {
 
         return profileSettings;
@@ -65,7 +97,8 @@ public class Profile {
 
         save();
 
-        profileDatas.forEach(profileData -> profileData.unload(player));
+        profileSettings.unload(player);
+        playerStats.unload(player);
 
     }
 
@@ -73,7 +106,14 @@ public class Profile {
 
         Player player = Bukkit.getPlayer(getOwner());
 
-        profileDatas.forEach(profileData -> profileData.load(player));
+        profileSettings.load(player);
+        playerStats.load(player);
+
+        if(getRPGClass() == null){
+
+
+
+        }
 
     }
 
@@ -81,7 +121,8 @@ public class Profile {
 
         Player player = Bukkit.getPlayer(getOwner());
 
-        profileDatas.forEach(profileData -> profileData.save(player));
+        profileSettings.save(player);
+        playerStats.save(player);
 
     }
 

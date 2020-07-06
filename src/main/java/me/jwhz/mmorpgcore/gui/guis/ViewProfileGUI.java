@@ -81,11 +81,11 @@ public class ViewProfileGUI extends GUI {
         }
 
         for (int i = 36; i < inventory.getSize(); i++)
-            inventory.setItem(i, fillerItem);
+            inventory.setItem(i, ItemFactory.replacePlaceholders(player, fillerItem));
 
-        inventory.setItem(45, backArrow);
+        inventory.setItem(45, ItemFactory.replacePlaceholders(player, backArrow));
 
-        inventory.setItem(47, enderChest);
+        inventory.setItem(47, ItemFactory.replacePlaceholders(player, enderChest));
 
         ItemStack info = playerInfo.clone();
 

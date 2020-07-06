@@ -1,22 +1,91 @@
 package me.jwhz.mmorpgcore.rpgclass;
 
-import me.jwhz.mmorpgcore.config.ConfigFile;
+import me.jwhz.mmorpgcore.manager.ManagerObject;
 import me.jwhz.mmorpgcore.rpgclass.mana.ManaSettings;
+import me.jwhz.mmorpgcore.rpgclass.passive.Passive;
+import me.jwhz.mmorpgcore.rpgclass.passive.PassiveType;
+import me.jwhz.mmorpgcore.utils.BukkitSerialization;
+import me.jwhz.mmorpgcore.utils.ItemFactory;
+import me.jwhz.mmorpgcore.utils.materials.UMaterial;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
-public abstract class RPGClass extends ConfigFile {
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
-    public RPGClass(String fileName) {
+public class RPGClass extends ManagerObject<File> {
 
-        super(fileName);
+    private File file;
+    private YamlConfiguration yamlConfiguration;
+
+    public RPGClass(File file) {
+
+        this.file = file;
+        this.yamlConfiguration = YamlConfiguration.loadConfiguration(file);
+
+    }
+
+    public String getClassName() {
+
+        if (yamlConfiguration.isSet("class name"))
+            return yamlConfiguration.getString("class name");
+
+        return file.getName().replace(".yml", "");
+
+    }
+
+    public ItemStack getItem() {
+
+        if (yamlConfiguration.isSet("gui item"))
+            return BukkitSerialization.convertSection(yamlConfiguration.getConfigurationSection("gui item"));
+
+        return ItemFactory.build(UMaterial.PAPER, getClassName(), "Edited in config....");
+
+    }
+
+    public List<Passive> getPassives() {
+
+        List<Passive> passives = new ArrayList<>();
+
+        if (yamlConfiguration.isSet("passives"))
+            for (String key : yamlConfiguration.getConfigurationSection("passives").getKeys(false)) {
+
+                ConfigurationSection configurationSection = yamlConfiguration.getConfigurationSection("passives." + key);
+                if (configurationSection.isSet("passive-type")) {
+
+                    PassiveType type = PassiveType.getByName(configurationSection.getString("passive-type"));
+
+                    try {
+
+                        passives.add((Passive) type.getPassiveClass().getConstructor(ConfigurationSection.class).newInstance(configurationSection));
+
+                    } catch (Exception ignore) {
+
+                    }
+
+                }
+
+            }
+
+        return passives;
 
     }
 
     public ManaSettings getManaSettings() {
 
-        if (getYamlConfiguration().isSet("mana"))
-            return new ManaSettings(getYamlConfiguration().getConfigurationSection("mana"));
+        if (yamlConfiguration.isSet("mana"))
+            return new ManaSettings(yamlConfiguration.getConfigurationSection("mana"));
 
         return new ManaSettings(100, 10);
+
+    }
+
+    @Override
+    public File getIdentifier() {
+
+        return file;
 
     }
 

@@ -59,7 +59,7 @@ public class ViewInventoryContentGUI extends GUI {
         for (int i = inventory.getSize() - 9; i < inventory.getSize(); i++)
             inventory.setItem(i, fillerItem);
 
-        inventory.setItem(inventory.getSize() - 5, backArrow);
+        inventory.setItem(inventory.getSize() - 5, ItemFactory.replacePlaceholders(player, backArrow));
 
     }
 

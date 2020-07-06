@@ -84,6 +84,7 @@ public class ProfileSelectGUI extends GUI {
                                 }
 
                                 player.createProfile(response);
+                                player.setCurrentProfile(player.getProfile(response));
                                 player.sendMessage(core.messages.profileCreated.replace("%profile%", response));
 
                                 return true;
@@ -92,11 +93,8 @@ public class ProfileSelectGUI extends GUI {
 
                         }.register();
 
-                    } else {
-
-                        return;
-
-                    }
+                    } else
+                        player.sendMessage(core.messages.maximumProfilesCreated);
 
                 } else if (!profile.getProfileUUID().equals(player.getCurrentProfile().getProfileUUID()))
                     player.setCurrentProfile(profile);
@@ -111,7 +109,7 @@ public class ProfileSelectGUI extends GUI {
     public void setupGUI(Player player) {
 
         for (int i = 0; i < inventory.getSize(); i++)
-            inventory.setItem(i, fillerItem);
+            inventory.setItem(i, ItemFactory.replacePlaceholders(player, fillerItem));
 
         DBPlayer dbPlayer = DBPlayer.getPlayer(player);
 

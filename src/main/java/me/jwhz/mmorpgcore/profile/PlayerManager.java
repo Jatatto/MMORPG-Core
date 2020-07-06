@@ -39,7 +39,7 @@ public class PlayerManager extends Manager<DBPlayer> implements Listener {
 
         int profileCap = 1;
 
-        if (player.isOp() || player.hasPermission(""))
+        if (player.isOp() || player.hasPermission("MMORPGCore.admin"))
             return Integer.MAX_VALUE;
 
         for (int i = 2; i < 10; i++)

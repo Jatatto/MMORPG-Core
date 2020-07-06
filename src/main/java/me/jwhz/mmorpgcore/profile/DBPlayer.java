@@ -1,10 +1,9 @@
 package me.jwhz.mmorpgcore.profile;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.client.model.UpdateOptions;
 import me.jwhz.mmorpgcore.MMORPGCore;
 import me.jwhz.mmorpgcore.manager.ManagerObject;
-import me.jwhz.mmorpgcore.profile.events.PlayerChangeProfileEvent;
+import me.jwhz.mmorpgcore.events.PlayerChangeProfileEvent;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

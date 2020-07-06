@@ -6,6 +6,7 @@ import me.jwhz.mmorpgcore.config.files.Messages;
 import me.jwhz.mmorpgcore.database.MongoDB;
 import me.jwhz.mmorpgcore.manager.Manager;
 import me.jwhz.mmorpgcore.profile.PlayerManager;
+import me.jwhz.mmorpgcore.rpgclass.RPGClassManager;
 import me.jwhz.mmorpgcore.rpgclass.mana.ManaManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -23,6 +24,7 @@ public final class MMORPGCore extends JavaPlugin {
     public MMORPGCorePlaceholderExpansion mmorpgCorePlaceholderExpansion;
 
     private List<Manager> managers;
+    public RPGClassManager rpgClassManager;
     public CommandManager commandManager;
     public PlayerManager playerManager;
     public ManaManager manaManager;
@@ -40,6 +42,7 @@ public final class MMORPGCore extends JavaPlugin {
 
         managers = new ArrayList<>();
 
+        managers.add((rpgClassManager = new RPGClassManager()));
         managers.add((commandManager = new CommandManager()));
         managers.add((playerManager = new PlayerManager()));
         managers.add((manaManager = new ManaManager()));

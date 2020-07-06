@@ -1,4 +1,4 @@
-package me.jwhz.mmorpgcore.profile.events;
+package me.jwhz.mmorpgcore.events;
 
 import com.mongodb.lang.Nullable;
 import me.jwhz.mmorpgcore.profile.Profile;
