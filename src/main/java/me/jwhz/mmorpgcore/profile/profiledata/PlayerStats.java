@@ -63,7 +63,7 @@ public class PlayerStats extends ProfileData {
 
     public double getMana() {
 
-        return document.get("mana", profile.getProfileSettings().getManaSettings().getManaRegeneration());
+        return document.get("mana", profile.getProfileSettings().getManaSettings().getMaxMana());
 
     }
 
