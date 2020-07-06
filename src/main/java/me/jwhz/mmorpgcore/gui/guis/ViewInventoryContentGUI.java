@@ -19,9 +19,9 @@ public class ViewInventoryContentGUI extends GUI {
     @ConfigValue("gui.view inventory content.name")
     String name = "&aViewing items";
 
-    @ConfigValue("gui.view inventory.items.filler item")
+    @ConfigValue("gui.view inventory content.items.filler item")
     ItemStack fillerItem = ItemFactory.build(UMaterial.GRAY_STAINED_GLASS_PANE, "&f");
-    @ConfigValue("gui.view inventory.items.back arrow")
+    @ConfigValue("gui.view inventory content.items.back arrow")
     ItemStack backArrow = ItemFactory.build(UMaterial.ARROW, "&cBack");
 
     public ViewInventoryContentGUI(Player player, GUI previous, ItemStack[] content) {

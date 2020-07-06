@@ -35,15 +35,15 @@ public class PlayerManager extends Manager<DBPlayer> implements Listener {
 
     }
 
-    public int getMaximumProfiles(Player player){
+    public int getMaximumProfiles(Player player) {
 
         int profileCap = 1;
 
-        if(player.isOp() || player.hasPermission(""))
+        if (player.isOp() || player.hasPermission(""))
             return Integer.MAX_VALUE;
 
-        for(int i = 2; i < 10; i ++)
-            if(player.hasPermission("MMORPGCore.user.profiles-limit." + i))
+        for (int i = 2; i < 10; i++)
+            if (player.hasPermission("MMORPGCore.user.profiles-limit." + i))
                 profileCap = i;
 
         return profileCap;
@@ -73,6 +73,8 @@ public class PlayerManager extends Manager<DBPlayer> implements Listener {
 
         } else if (dbPlayer.getLastPlayed() != null)
             dbPlayer.setCurrentProfile(dbPlayer.getLastPlayed());
+
+        dbPlayer.sendMessage(core.messages.profileLoaded.replace("%profile%", dbPlayer.getCurrentProfile().getProfileName()));
 
     }
 

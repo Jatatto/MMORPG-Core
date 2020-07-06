@@ -5,6 +5,7 @@ import me.jwhz.mmorpgcore.config.ConfigValue;
 import me.jwhz.mmorpgcore.gui.GUI;
 import me.jwhz.mmorpgcore.profile.DBPlayer;
 import me.jwhz.mmorpgcore.profile.Profile;
+import me.jwhz.mmorpgcore.response.responses.ChatResponse;
 import me.jwhz.mmorpgcore.utils.ItemFactory;
 import me.jwhz.mmorpgcore.utils.materials.UMaterial;
 import org.bukkit.Bukkit;
@@ -58,13 +59,44 @@ public class ProfileSelectGUI extends GUI {
 
             if (e.getClick().isShiftClick() && profiles.get(e.getCurrentItem()) != null)
                 new ViewProfileGUI(player.getPlayer(), profiles.get(e.getCurrentItem()));
-             else {
+            else {
 
                 Profile profile = profiles.get(e.getCurrentItem());
 
                 if (profile == null) {
 
-                    //TODO: CreateProfileGUI
+                    e.getWhoClicked().closeInventory();
+
+                    player.sendMessage(core.messages.enterProfileName);
+
+                    if (core.playerManager.getMaximumProfiles(player.getPlayer()) > player.getProfiles().size()) {
+
+                        new ChatResponse(player.getPlayer()) {
+
+                            @Override
+                            public boolean onResponse(String response) {
+
+                                if (player.getProfile(response) != null) {
+
+                                    player.sendMessage(core.messages.profileAlreadyExists);
+                                    return false;
+
+                                }
+
+                                player.createProfile(response);
+                                player.sendMessage(core.messages.profileCreated.replace("%profile%", response));
+
+                                return true;
+
+                            }
+
+                        }.register();
+
+                    } else {
+
+                        return;
+
+                    }
 
                 } else if (!profile.getProfileUUID().equals(player.getCurrentProfile().getProfileUUID()))
                     player.setCurrentProfile(profile);
@@ -72,7 +104,6 @@ public class ProfileSelectGUI extends GUI {
             }
 
         }
-
 
     }
 

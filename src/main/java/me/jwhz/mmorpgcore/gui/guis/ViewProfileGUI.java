@@ -46,9 +46,8 @@ public class ViewProfileGUI extends GUI {
 
         this.inventory = Bukkit.createInventory(null, 54, name.replace("%profile_name%", profile.getProfileName()));
 
-
         if (DBPlayer.getPlayer(player).getCurrentProfile().getProfileUUID().equals(profile.getProfileUUID()))
-            profile.save();
+            profile.getPlayerStats().save(player);
 
         open(player);
 
@@ -62,14 +61,14 @@ public class ViewProfileGUI extends GUI {
         if (e.getSlot() == 45)
             new ProfileSelectGUI((Player) e.getWhoClicked());
         else if (e.getSlot() == 47)
-            new ViewInventoryContentGUI((Player) e.getWhoClicked(), this, profile.getEnderChest());
+            new ViewInventoryContentGUI((Player) e.getWhoClicked(), this, profile.getPlayerStats().getEnderChest());
 
     }
 
     @Override
     public void setupGUI(Player player) {
 
-        ItemStack[] items = profile.getInventory();
+        ItemStack[] items = profile.getPlayerStats().getInventory();
 
         if (items != null) {
 
@@ -111,6 +110,7 @@ public class ViewProfileGUI extends GUI {
         inventory.setItem(48, info);
 
         if (items != null) {
+
             ItemStack[] armor = new ItemStack[]{items[39], items[38], items[37], items[36]};
 
             for (int i = 0; i < armor.length; i++)
@@ -122,10 +122,10 @@ public class ViewProfileGUI extends GUI {
 
     private String replaceVariables(String string) {
 
-        Location location = profile.getLocation();
+        Location location = profile.getPlayerStats().getLocation();
 
-        return string.replace("%profile_exp_level%", profile.getExp().getInteger("xp level") + "")
-                .replace("%profile_current_xp%", profile.getExp().getString("current xp"))
+        return string.replace("%profile_exp_level%", profile.getPlayerStats().getExp().getInteger("xp level") + "")
+                .replace("%profile_current_xp%", profile.getPlayerStats().getExp().getString("current xp"))
                 .replace("%profile_x%", location.getBlockX() + "")
                 .replace("%profile_y%", location.getBlockY() + "")
                 .replace("%profile_z%", location.getBlockZ() + ""

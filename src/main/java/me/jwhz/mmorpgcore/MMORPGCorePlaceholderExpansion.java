@@ -58,6 +58,15 @@ public class MMORPGCorePlaceholderExpansion extends PlaceholderExpansion {
 
         DBPlayer dbPlayer = DBPlayer.getPlayer(player);
 
+        if (value.equalsIgnoreCase("mana"))
+            return "" + (int) dbPlayer.getCurrentProfile().getPlayerStats().getMana();
+
+        if (value.equalsIgnoreCase("max_mana"))
+            return "" + (int) dbPlayer.getCurrentProfile().getProfileSettings().getManaSettings().getMaxMana();
+
+        if (value.equalsIgnoreCase("mana_regeneration"))
+            return "" + dbPlayer.getCurrentProfile().getProfileSettings().getManaSettings().getManaRegeneration();
+
         if (value.startsWith("profile") && value.contains("_")) {
 
             String[] parts = value.split("_");

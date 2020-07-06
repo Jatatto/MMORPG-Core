@@ -1,5 +1,6 @@
-package me.jwhz.mmorpgcore;
+package me.jwhz.mmorpgcore.config.files;
 
+import me.jwhz.mmorpgcore.MMORPGCore;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -10,7 +11,7 @@ public class Config {
 
     private MMORPGCore core;
 
-    Config(MMORPGCore core) {
+    public Config(MMORPGCore core) {
 
         this.core = core;
 

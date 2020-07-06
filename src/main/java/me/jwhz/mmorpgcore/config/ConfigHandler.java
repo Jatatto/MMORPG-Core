@@ -77,12 +77,14 @@ public class ConfigHandler {
                 ConfigValue configAnnotation = f.getAnnotation(ConfigValue.class);
 
                 try {
+
                     Object value = f.get(clazz);
 
-                    if (value instanceof ItemStack)
-                        configuration.set(configAnnotation.value(), BukkitSerialization.convertItem((ItemStack) value));
-                    else if (!configuration.isSet(configAnnotation.value()))
-                        configuration.set(configAnnotation.value(), value);
+                    if (!configuration.isSet(configAnnotation.value()))
+                        if (value instanceof ItemStack)
+                            configuration.set(configAnnotation.value(), BukkitSerialization.convertItem((ItemStack) value));
+                        else
+                            configuration.set(configAnnotation.value(), value);
 
                 } catch (Exception e) {
                     e.printStackTrace();

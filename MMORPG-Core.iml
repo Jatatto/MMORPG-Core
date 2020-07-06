@@ -30,6 +30,15 @@
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-sync:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:bson:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-core:4.0.1" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: org.bukkit:craftbukkit:1.15.2">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/craftbukkit-1.15.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="library" scope="PROVIDED" name="Maven: me.clip:placeholderapi:2.8.1" level="project" />
   </component>
 </module>

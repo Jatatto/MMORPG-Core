@@ -140,7 +140,7 @@ public class BukkitSerialization {
             dataInput.close();
             return inventory;
         } catch (ClassNotFoundException e) {
-            throw new IOException("Unable to decode class type.", e);
+            throw new IOException("Unable to decode rpgclass type.", e);
         }
     }
 
@@ -169,7 +169,7 @@ public class BukkitSerialization {
             dataInput.close();
             return items;
         } catch (ClassNotFoundException e) {
-            throw new IOException("Unable to decode class type.", e);
+            throw new IOException("Unable to decode rpgclass type.", e);
         }
     }
 
