@@ -1,10 +1,14 @@
 package me.jwhz.mmorpgcore.rpgclass.passive;
 
+import me.jwhz.mmorpgcore.rpgclass.passive.passives.DamageReductionPassive;
+import me.jwhz.mmorpgcore.rpgclass.passive.passives.HealthRegenerationPassive;
 import me.jwhz.mmorpgcore.rpgclass.passive.passives.ManaReductionPassive;
 import me.jwhz.mmorpgcore.rpgclass.passive.passives.ManaRegenerationPassive;
 
 public enum PassiveType {
 
+    DAMAGE_REDUCTION(DamageReductionPassive.class, "damage reduction"),
+    HEALTH_REGENERATION(HealthRegenerationPassive.class, "health rengeration"),
     MANA_REDUCTION(ManaReductionPassive.class, "mana reduction"),
     MANA_REGENERATION(ManaRegenerationPassive.class, "mana regeneration");
 

@@ -2,6 +2,9 @@ package me.jwhz.mmorpgcore.rpgclass.health;
 
 import me.jwhz.mmorpgcore.manager.Manager;
 import me.jwhz.mmorpgcore.profile.DBPlayer;
+import me.jwhz.mmorpgcore.rpgclass.passive.EventPassive;
+import me.jwhz.mmorpgcore.rpgclass.passive.Passive;
+import me.jwhz.mmorpgcore.rpgclass.passive.passives.HealthRegenerationPassive;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,9 +50,16 @@ public class HealthManager extends Manager implements Listener {
 
         e.setCancelled(true);
 
-        if (dbPlayer != null && dbPlayer.getCurrentProfile() != null)
+        if (dbPlayer != null && dbPlayer.getCurrentProfile() != null) {
+
+            for(Passive passive : dbPlayer.getCurrentProfile().getPassives())
+                if(passive instanceof HealthRegenerationPassive)
+                    ((EventPassive)passive).handle(e);
+
             dbPlayer.getCurrentProfile().getPlayerStats().setHealth(((Player) e.getEntity()).getHealth() + e.getAmount());
 
+
+        }
     }
 
 }
