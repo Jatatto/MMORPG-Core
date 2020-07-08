@@ -29,8 +29,8 @@ public class Messages extends ConfigFile {
      * Mana related messages
      */
 
-    @ConfigValue("messages.mana.mana bar")
-    public String manaBar = "&3Mana: &b%mmorpg_mana%/%mmorpg_max_mana%";
+    @ConfigValue("messages.status bar")
+    public String manaBar = "&4Health: &c%mmorpg_health%/%mmorpg_max_health%                 &3%mmorpg_mana_name%: &b%mmorpg_mana%/%mmorpg_max_mana%";
 
     public Messages() {
 

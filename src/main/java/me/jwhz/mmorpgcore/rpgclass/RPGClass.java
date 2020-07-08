@@ -29,10 +29,7 @@ public class RPGClass extends ManagerObject<File> {
 
     public String getClassName() {
 
-        if (yamlConfiguration.isSet("class name"))
-            return yamlConfiguration.getString("class name");
-
-        return file.getName().replace(".yml", "");
+        return yamlConfiguration.getString("class name", file.getName().replace(".yml", ""));
 
     }
 
@@ -42,6 +39,12 @@ public class RPGClass extends ManagerObject<File> {
             return BukkitSerialization.convertSection(yamlConfiguration.getConfigurationSection("gui item"));
 
         return ItemFactory.build(UMaterial.PAPER, getClassName(), "Edited in config....");
+
+    }
+
+    public double getMaxHealth() {
+
+        return yamlConfiguration.getDouble("max health", 20.0);
 
     }
 
@@ -78,7 +81,7 @@ public class RPGClass extends ManagerObject<File> {
         if (yamlConfiguration.isSet("mana"))
             return new ManaSettings(yamlConfiguration.getConfigurationSection("mana"));
 
-        return new ManaSettings(100, 10);
+        return new ManaSettings(100, 10, "Mana");
 
     }
 

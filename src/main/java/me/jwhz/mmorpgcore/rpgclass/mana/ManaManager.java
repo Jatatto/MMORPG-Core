@@ -5,6 +5,7 @@ import me.jwhz.mmorpgcore.events.ManaRegenerationEvent;
 import me.jwhz.mmorpgcore.manager.Manager;
 import me.jwhz.mmorpgcore.profile.DBPlayer;
 import me.jwhz.mmorpgcore.profile.profiledata.PlayerStats;
+import me.jwhz.mmorpgcore.rpgclass.RPGClass;
 import net.minecraft.server.v1_15_R1.ChatComponentText;
 import net.minecraft.server.v1_15_R1.ChatMessageType;
 import net.minecraft.server.v1_15_R1.PacketPlayOutChat;
@@ -20,7 +21,7 @@ public class ManaManager extends Manager {
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(core, () -> {
 
-            PlayerStats playerStats;
+            RPGClass rpgClass;
             ManaSettings manaSettings;
 
             for (Player player : Bukkit.getOnlinePlayers()) {
@@ -29,25 +30,30 @@ public class ManaManager extends Manager {
 
                 if (dbPlayer != null && dbPlayer.getCurrentProfile() != null) {
 
-                    playerStats = dbPlayer.getCurrentProfile().getPlayerStats();
-                    manaSettings = dbPlayer.getCurrentProfile().getProfileSettings().getManaSettings();
+                    rpgClass = dbPlayer.getCurrentProfile().getRPGClass();
+                    manaSettings = rpgClass == null ? new ManaSettings(100, 5, "Mana") : rpgClass.getManaSettings();
 
                     ManaRegenerationEvent manaRegenerationEvent = new ManaRegenerationEvent(dbPlayer, manaSettings.getManaRegeneration());
 
                     if (!manaRegenerationEvent.isCancelled())
-                        playerStats.setMana(Math.min(playerStats.getMana() + manaRegenerationEvent.getRegenerationAmount(), manaSettings.getMaxMana()));
+                        dbPlayer.getCurrentProfile().getPlayerStats()
+                                .setMana(Math.min(dbPlayer.getCurrentProfile().getPlayerStats().getMana() + manaRegenerationEvent.getRegenerationAmount(), manaSettings.getMaxMana()));
 
-                    PacketPlayOutChat packet = new PacketPlayOutChat(new ChatComponentText(
-                            PlaceholderAPI.setPlaceholders(player, core.messages.manaBar)
-                    ), ChatMessageType.GAME_INFO);
-
-                    ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+                    updateBar(player);
 
                 }
 
             }
 
         }, 0, 20);
+
+    }
+
+    public void updateBar(Player player) {
+
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(new ChatComponentText(
+                PlaceholderAPI.setPlaceholders(player, core.messages.manaBar)
+        ), ChatMessageType.GAME_INFO));
 
     }
 

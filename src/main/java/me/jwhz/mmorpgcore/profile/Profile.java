@@ -1,6 +1,7 @@
 package me.jwhz.mmorpgcore.profile;
 
 import me.jwhz.mmorpgcore.MMORPGCore;
+import me.jwhz.mmorpgcore.gui.guis.SelectClassGUI;
 import me.jwhz.mmorpgcore.profile.profiledata.PlayerStats;
 import me.jwhz.mmorpgcore.profile.profiledata.ProfileSettings;
 import me.jwhz.mmorpgcore.rpgclass.RPGClass;
@@ -9,6 +10,7 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +29,14 @@ public class Profile {
 
         profileSettings = new ProfileSettings(this, data.containsKey("profile settings") ? (Document) data.get("profile settings") : new Document());
         playerStats = new PlayerStats(this, data.containsKey("player stats") ? (Document) data.get("player stats") : new Document());
+
+        getRPGClass();
+
+        if (passives == null)
+            passives = new ArrayList<>();
+
+        for (Passive passive : passives)
+            passive.setProfile(this);
 
     }
 
@@ -60,8 +70,14 @@ public class Profile {
 
             RPGClass rpgClass = core.rpgClassManager.getRPGClass(data.getString("rpgclass"));
 
-            if (rpgClass != null)
+            if (rpgClass != null) {
+
                 passives = rpgClass.getPassives();
+
+                for (Passive passive : passives)
+                    passive.setProfile(this);
+
+            }
 
             return rpgClass;
 
@@ -109,11 +125,8 @@ public class Profile {
         profileSettings.load(player);
         playerStats.load(player);
 
-        if(getRPGClass() == null){
-
-
-
-        }
+        if (getRPGClass() == null)
+            new SelectClassGUI(player);
 
     }
 

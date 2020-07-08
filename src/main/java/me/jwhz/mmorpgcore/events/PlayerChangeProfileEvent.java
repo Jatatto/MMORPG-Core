@@ -43,7 +43,6 @@ public class PlayerChangeProfileEvent extends Event implements Cancellable {
 
     }
 
-
     @Override
     public boolean isCancelled() {
 

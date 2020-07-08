@@ -2,6 +2,7 @@ package me.jwhz.mmorpgcore.command.commands;
 
 import me.jwhz.mmorpgcore.command.CommandBase;
 import me.jwhz.mmorpgcore.gui.guis.ProfileSelectGUI;
+import me.jwhz.mmorpgcore.gui.guis.SelectClassGUI;
 import me.jwhz.mmorpgcore.profile.DBPlayer;
 import me.jwhz.mmorpgcore.profile.Profile;
 import org.bukkit.command.Command;
@@ -24,6 +25,17 @@ public class ProfileCMD extends CommandBase {
             new ProfileSelectGUI(player.getPlayer());
 
             // player.sendMessage("&aCurrent profile: " + player.getCurrentProfile().getProfileName());
+            return;
+
+        }
+
+        if (args[0].equalsIgnoreCase("class")) {
+
+            if (player.getCurrentProfile().getRPGClass() == null)
+                new SelectClassGUI(player.getPlayer());
+            else
+                player.sendMessage("&aCurrent class: " + player.getCurrentProfile().getRPGClass().getClassName());
+
             return;
 
         }

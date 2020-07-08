@@ -18,16 +18,16 @@ import java.util.Map;
 
 public class SelectClassGUI extends GUI {
 
-    private Map<ItemStack, RPGClass> classes;
+    private Map<ItemStack, RPGClass> classes = new HashMap<>();
 
     @ConfigValue("gui.select class.rows")
     int rows = 3;
     @ConfigValue("gui.select class.name")
     String name = "&aSelect a class";
-    @ConfigValue("gui.profile select.items.filler item")
+    @ConfigValue("gui.select class.items.filler item")
     ItemStack fillerItem = ItemFactory.build(UMaterial.GRAY_STAINED_GLASS_PANE, "&f");
 
-    @ConfigValue("gui.profile select.slots")
+    @ConfigValue("gui.select class.slots")
     Map<String, String> slots = getDefaultSlots();
 
     public SelectClassGUI(Player player) {
@@ -54,6 +54,8 @@ public class SelectClassGUI extends GUI {
 
             e.getWhoClicked().sendMessage(core.messages.classSelected.replace("%class%", rpgClass.getClassName()));
 
+            e.getWhoClicked().closeInventory();
+
         }
 
     }
@@ -61,8 +63,13 @@ public class SelectClassGUI extends GUI {
     @Override
     public void onClose(InventoryCloseEvent e) {
 
-        new SelectClassGUI((Player) e.getPlayer());
-        e.getPlayer().sendMessage(core.messages.selectClass);
+        DBPlayer dbPlayer = DBPlayer.getPlayer((Player) e.getPlayer());
+
+        if (dbPlayer != null && dbPlayer.getCurrentProfile() != null && dbPlayer.getCurrentProfile().getRPGClass() == null)
+            Bukkit.getScheduler().scheduleSyncDelayedTask(core, () -> {
+                new SelectClassGUI((Player) e.getPlayer());
+                e.getPlayer().sendMessage(core.messages.selectClass);
+            }, 1);
 
     }
 
@@ -72,17 +79,19 @@ public class SelectClassGUI extends GUI {
         for (int i = 0; i < inventory.getSize(); i++)
             inventory.setItem(i, ItemFactory.replacePlaceholders(player, fillerItem));
 
-        for (Map.Entry<String, String> entry : slots.entrySet()) {
+        for (Map.Entry<String, String> entry : slots.entrySet())
 
-            RPGClass rpgClass = core.rpgClassManager.getRPGClass(entry.getValue());
+            if (core.rpgClassManager.isRPGClass(entry.getValue())) {
 
-            ItemStack item = rpgClass.getItem();
+                RPGClass rpgClass = core.rpgClassManager.getRPGClass(entry.getValue());
 
-            inventory.setItem(Integer.parseInt(entry.getKey()), ItemFactory.replacePlaceholders(player, item));
+                ItemStack item = ItemFactory.replacePlaceholders(player, rpgClass.getItem());
 
-            classes.put(item, rpgClass);
+                inventory.setItem(Integer.parseInt(entry.getKey()), item);
 
-        }
+                classes.put(item, rpgClass);
+
+            }
 
     }
 

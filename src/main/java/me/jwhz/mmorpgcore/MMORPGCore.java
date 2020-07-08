@@ -7,6 +7,7 @@ import me.jwhz.mmorpgcore.database.MongoDB;
 import me.jwhz.mmorpgcore.manager.Manager;
 import me.jwhz.mmorpgcore.profile.PlayerManager;
 import me.jwhz.mmorpgcore.rpgclass.RPGClassManager;
+import me.jwhz.mmorpgcore.rpgclass.health.HealthManager;
 import me.jwhz.mmorpgcore.rpgclass.mana.ManaManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -26,11 +27,11 @@ public final class MMORPGCore extends JavaPlugin {
     private List<Manager> managers;
     public RPGClassManager rpgClassManager;
     public CommandManager commandManager;
+    public HealthManager healthManager;
     public PlayerManager playerManager;
     public ManaManager manaManager;
     public Messages messages;
     public Config config;
-
 
     @Override
     public void onEnable() {
@@ -44,6 +45,7 @@ public final class MMORPGCore extends JavaPlugin {
 
         managers.add((rpgClassManager = new RPGClassManager()));
         managers.add((commandManager = new CommandManager()));
+        managers.add((healthManager = new HealthManager()));
         managers.add((playerManager = new PlayerManager()));
         managers.add((manaManager = new ManaManager()));
 

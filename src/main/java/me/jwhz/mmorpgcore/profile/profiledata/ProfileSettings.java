@@ -13,21 +13,6 @@ public class ProfileSettings extends ProfileData {
 
     }
 
-    public ManaSettings getManaSettings() {
-
-        if (document.containsKey("mana settings"))
-            return new ManaSettings((Document) document.get("mana settings"));
-
-        return new ManaSettings(100, 5);
-
-    }
-
-    public void setManaSettings(ManaSettings manaSettings) {
-
-        document.put("mana settings", manaSettings.getDocument());
-
-    }
-
     @Override
     public void load(Player player) {
 

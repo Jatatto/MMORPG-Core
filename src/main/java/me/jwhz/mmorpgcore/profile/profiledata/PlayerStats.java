@@ -1,9 +1,11 @@
 package me.jwhz.mmorpgcore.profile.profiledata;
 
 import me.jwhz.mmorpgcore.MMORPGCore;
+import me.jwhz.mmorpgcore.profile.DBPlayer;
 import me.jwhz.mmorpgcore.profile.Profile;
 import me.jwhz.mmorpgcore.utils.BukkitSerialization;
 import org.bson.Document;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -13,12 +15,51 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class PlayerStats extends ProfileData {
 
     public PlayerStats(Profile profile, Document document) {
 
         super(profile, document, "player stats");
+
+    }
+
+    public double getHealth() {
+
+        return document.get("health", 20.0);
+
+    }
+
+    public double getMaxHealth() {
+
+        return document.get("max health", 20.0);
+
+    }
+
+    public void setMaxHealth(double maxHealth) {
+
+        document.put("max health", maxHealth);
+
+    }
+
+    public double getHealthScale() {
+
+        return getMaxHealth() / 20.0;
+
+    }
+
+    public void setHealth(double health) {
+
+        Player player = Bukkit.getPlayer(profile.getOwner());
+
+        if (player != null) {
+
+            Objects.requireNonNull(Bukkit.getPlayer(profile.getOwner())).setHealth(Math.min(player.getMaxHealth(), health));
+            document.put("health", Math.min(DBPlayer.getPlayer(player).getCurrentProfile().getPlayerStats().getMaxHealth(), health * getHealthScale()));
+            MMORPGCore.getInstance().manaManager.updateBar(player);
+
+        }
 
     }
 
@@ -63,7 +104,7 @@ public class PlayerStats extends ProfileData {
 
     public double getMana() {
 
-        return document.get("mana", profile.getProfileSettings().getManaSettings().getMaxMana());
+        return document.get("mana", profile.getRPGClass() != null ? profile.getRPGClass().getManaSettings().getMaxMana() : 100);
 
     }
 
@@ -84,8 +125,10 @@ public class PlayerStats extends ProfileData {
 
         player.teleport(document.containsKey("location") ? getLocation() : MMORPGCore.getInstance().config.getNewProfileSpawn());
 
-        player.setMaxHealth(document.get("max health", 20.0));
-        player.setHealth(document.get("health", 20.0));
+        player.setMaxHealth(20.0);
+
+        document.put("max health", profile.getRPGClass() != null ? profile.getRPGClass().getMaxHealth() : 20.0);
+        player.setHealth(document.get("health", 20.0) / getHealthScale());
 
         player.setFoodLevel(document.get("food", 20));
 
@@ -156,7 +199,10 @@ public class PlayerStats extends ProfileData {
         document.put("enderchest", BukkitSerialization.itemStackArrayToBase64(player.getEnderChest().getContents()));
         document.put("inventory", BukkitSerialization.itemStackArrayToBase64(player.getInventory().getContents()));
         document.put("health", player.getHealth());
-        document.put("max health", player.getMaxHealth());
+
+        if (document.containsKey("max health") && profile.getRPGClass() != null)
+            document.put("max health", profile.getRPGClass().getMaxHealth());
+
         document.put("food", player.getFoodLevel());
         document.put("location", BukkitSerialization.locationToString(player.getLocation()));
 

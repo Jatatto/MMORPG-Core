@@ -7,12 +7,13 @@ import me.jwhz.mmorpgcore.rpgclass.passive.TickPassive;
 import org.bukkit.Bukkit;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 
 public class RPGClassManager extends Manager<RPGClass> {
 
     private File directory;
+    private Map<DBPlayer, Profile> profileChanges = new HashMap<>();
+    private Map<DBPlayer, Profile> changesQueue = new HashMap<>();
 
     public RPGClassManager() {
 
@@ -31,6 +32,21 @@ public class RPGClassManager extends Manager<RPGClass> {
 
                 DBPlayer dbPlayer = DBPlayer.getPlayer(player);
 
+                profileChanges.putAll(changesQueue);
+                changesQueue.clear();
+
+                Iterator<Map.Entry<DBPlayer, Profile>> iterator = profileChanges.entrySet().iterator();
+
+                while (iterator.hasNext()) {
+
+                    Map.Entry<DBPlayer, Profile> entry = iterator.next();
+
+                    entry.getKey().setCurrentProfile(entry.getValue());
+
+                }
+
+                profileChanges.clear();
+
                 if (dbPlayer != null) {
 
                     Profile profile = dbPlayer.getCurrentProfile();
@@ -48,6 +64,12 @@ public class RPGClassManager extends Manager<RPGClass> {
             });
 
         }, 0, 1);
+
+    }
+
+    public void addProfileChange(DBPlayer dbPlayer, Profile profile) {
+
+        changesQueue.put(dbPlayer, profile);
 
     }
 

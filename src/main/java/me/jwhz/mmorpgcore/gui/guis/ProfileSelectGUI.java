@@ -6,6 +6,7 @@ import me.jwhz.mmorpgcore.gui.GUI;
 import me.jwhz.mmorpgcore.profile.DBPlayer;
 import me.jwhz.mmorpgcore.profile.Profile;
 import me.jwhz.mmorpgcore.response.responses.ChatResponse;
+import me.jwhz.mmorpgcore.rpgclass.RPGClass;
 import me.jwhz.mmorpgcore.utils.ItemFactory;
 import me.jwhz.mmorpgcore.utils.materials.UMaterial;
 import org.bukkit.Bukkit;
@@ -65,11 +66,12 @@ public class ProfileSelectGUI extends GUI {
 
                 if (profile == null) {
 
+                    e.setCurrentItem(null);
                     e.getWhoClicked().closeInventory();
 
-                    player.sendMessage(core.messages.enterProfileName);
-
                     if (core.playerManager.getMaximumProfiles(player.getPlayer()) > player.getProfiles().size()) {
+
+                        player.sendMessage(core.messages.enterProfileName);
 
                         new ChatResponse(player.getPlayer()) {
 
@@ -84,8 +86,9 @@ public class ProfileSelectGUI extends GUI {
                                 }
 
                                 player.createProfile(response);
-                                player.setCurrentProfile(player.getProfile(response));
+                                core.rpgClassManager.addProfileChange(player, player.getProfile(response));
                                 player.sendMessage(core.messages.profileCreated.replace("%profile%", response));
+
 
                                 return true;
 

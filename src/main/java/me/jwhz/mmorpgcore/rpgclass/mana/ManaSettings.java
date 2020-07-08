@@ -15,14 +15,21 @@ public class ManaSettings {
 
     public ManaSettings(ConfigurationSection section) {
 
-        this(section.getDouble("max mana"), section.getDouble("mana regeneration"));
+        this(section.getDouble("max mana"), section.getDouble("mana regeneration"), section.getString("mana name", "Mana"));
 
     }
 
-    public ManaSettings(double maxMana, double manaRegeneration) {
+    public ManaSettings(double maxMana, double manaRegeneration, String manaName) {
 
         document.put("max mana", maxMana);
         document.put("mana regeneration", manaRegeneration);
+        document.put("mana name", manaName);
+
+    }
+
+    public String getManaName() {
+
+        return document.get("mana name", "Mana");
 
     }
 
