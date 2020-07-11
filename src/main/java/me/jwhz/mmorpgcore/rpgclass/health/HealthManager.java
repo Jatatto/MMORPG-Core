@@ -6,6 +6,7 @@ import me.jwhz.mmorpgcore.rpgclass.passive.EventPassive;
 import me.jwhz.mmorpgcore.rpgclass.passive.Passive;
 import me.jwhz.mmorpgcore.rpgclass.passive.passives.DamageReductionPassive;
 import me.jwhz.mmorpgcore.rpgclass.passive.passives.HealthRegenerationPassive;
+import net.minecraft.server.v1_15_R1.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,11 +25,12 @@ public class HealthManager extends Manager implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamage(EntityDamageEvent e) {
 
         if (e.isCancelled() || !(e.getEntity() instanceof Player))
             return;
+
 
         DBPlayer dbPlayer = DBPlayer.getPlayer((Player) e.getEntity());
 
@@ -45,7 +47,7 @@ public class HealthManager extends Manager implements Listener {
 
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onHealthRegen(EntityRegainHealthEvent e) {
 
         if (e.isCancelled() || !(e.getEntity() instanceof Player))
