@@ -82,12 +82,16 @@ public class PlayerManager extends Manager<DBPlayer> implements Listener {
 
         DBPlayer dbPlayer = DBPlayer.getPlayer(player);
 
-        if (dbPlayer.getCurrentProfile() != null)
-            dbPlayer.getCurrentProfile().unloadProfile();
+        if (dbPlayer != null) {
 
-        dbPlayer.save();
+            if (dbPlayer.getCurrentProfile() != null)
+                dbPlayer.getCurrentProfile().unloadProfile();
 
-        getList().remove(dbPlayer);
+            dbPlayer.save();
+
+            getList().remove(dbPlayer);
+
+        }
 
     }
 

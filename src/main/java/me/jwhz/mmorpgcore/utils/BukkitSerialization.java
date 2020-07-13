@@ -2,6 +2,7 @@ package me.jwhz.mmorpgcore.utils;
 
 import me.jwhz.mmorpgcore.utils.materials.UMaterial;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -238,10 +239,18 @@ public class BukkitSerialization {
         ItemMeta meta = item.getItemMeta();
 
         if (section.containsKey("name"))
-            meta.setDisplayName(String.valueOf(section.get("name")));
+            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', String.valueOf(section.get("name"))));
 
-        if (section.containsKey("lore"))
-            meta.setLore((List<String>) section.get("lore"));
+        if (section.containsKey("lore")) {
+
+            List<String> lore = new ArrayList<>();
+
+            for (String line : (List<String>) section.get("lore"))
+                lore.add(ChatColor.translateAlternateColorCodes('&', line));
+
+            meta.setLore(lore);
+
+        }
 
         if (section.containsKey("enchants"))
             for (String enchant : (List<String>) section.get("enchants")) {
@@ -252,7 +261,7 @@ public class BukkitSerialization {
 
             }
 
-        if (section.containsKey("custom model") && (int)section.get("custom model") != -1)
+        if (section.containsKey("custom model") && (int) section.get("custom model") != -1)
             meta.setCustomModelData((Integer) section.get("custom model"));
 
         item.setItemMeta(meta);
@@ -270,11 +279,18 @@ public class BukkitSerialization {
         ItemMeta meta = item.getItemMeta();
 
         if (section.contains("name"))
-            meta.setDisplayName(section.getString("name"));
+            meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', section.getString("name")));
 
-        if (section.contains("lore"))
-            meta.setLore(section.getStringList("lore"));
+        if (section.contains("lore")) {
 
+            List<String> lore = new ArrayList<>();
+
+            for (String line : section.getStringList("lore"))
+                lore.add(ChatColor.translateAlternateColorCodes('&', line));
+
+            meta.setLore(lore);
+
+        }
         if (section.contains("enchants"))
             for (String enchant : section.getStringList("enchants")) {
 

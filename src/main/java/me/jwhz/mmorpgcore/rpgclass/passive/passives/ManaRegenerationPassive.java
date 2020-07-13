@@ -43,4 +43,12 @@ public class ManaRegenerationPassive extends EventPassive<Double> {
         buffs.remove(buff);
 
     }
+
+    @Override
+    public String toString() {
+
+        return "Increase mana regeneration by " +  (regenerationBoost * 100) + "%";
+
+    }
+
 }

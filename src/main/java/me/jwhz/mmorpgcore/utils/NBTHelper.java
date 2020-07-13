@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class NBTHelper {
 
-    public static void addTag(String key, Object value, ItemStack item) {
+    public static ItemStack addTag(String key, Object value, ItemStack item) {
 
         net.minecraft.server.v1_15_R1.ItemStack itemStack = CraftItemStack.asNMSCopy(item);
         NBTTagCompound tags = itemStack.getOrCreateTag();
@@ -20,7 +20,7 @@ public class NBTHelper {
         else if (value instanceof Boolean)
             tags.setBoolean(key, (Boolean) value);
 
-        item = CraftItemStack.asBukkitCopy(itemStack);
+        return (item = CraftItemStack.asBukkitCopy(itemStack));
 
     }
 
@@ -67,7 +67,8 @@ public class NBTHelper {
         return false;
 
     }
-    public static boolean hasTag(String key, ItemStack item){
+
+    public static boolean hasTag(String key, ItemStack item) {
 
         return CraftItemStack.asNMSCopy(item).getOrCreateTag().hasKey(key);
 

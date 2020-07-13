@@ -3,6 +3,7 @@ package me.jwhz.mmorpgcore.rpgclass;
 import me.jwhz.mmorpgcore.manager.Manager;
 import me.jwhz.mmorpgcore.profile.DBPlayer;
 import me.jwhz.mmorpgcore.profile.Profile;
+import me.jwhz.mmorpgcore.rpgclass.passive.PassiveListeners;
 import me.jwhz.mmorpgcore.rpgclass.passive.TickPassive;
 import org.bukkit.Bukkit;
 
@@ -26,44 +27,42 @@ public class RPGClassManager extends Manager<RPGClass> {
 
         loadRPGClasses();
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(core, () -> {
+        Bukkit.getPluginManager().registerEvents(new PassiveListeners(), core);
 
-            Bukkit.getOnlinePlayers().forEach(player -> {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(core, () -> Bukkit.getOnlinePlayers().forEach(player -> {
 
-                DBPlayer dbPlayer = DBPlayer.getPlayer(player);
+            DBPlayer dbPlayer = DBPlayer.getPlayer(player);
 
-                profileChanges.putAll(changesQueue);
-                changesQueue.clear();
+            profileChanges.putAll(changesQueue);
+            changesQueue.clear();
 
-                Iterator<Map.Entry<DBPlayer, Profile>> iterator = profileChanges.entrySet().iterator();
+            Iterator<Map.Entry<DBPlayer, Profile>> iterator = profileChanges.entrySet().iterator();
 
-                while (iterator.hasNext()) {
+            while (iterator.hasNext()) {
 
-                    Map.Entry<DBPlayer, Profile> entry = iterator.next();
+                Map.Entry<DBPlayer, Profile> entry = iterator.next();
 
-                    entry.getKey().setCurrentProfile(entry.getValue());
+                entry.getKey().setCurrentProfile(entry.getValue());
 
-                }
+            }
 
-                profileChanges.clear();
+            profileChanges.clear();
 
-                if (dbPlayer != null) {
+            if (dbPlayer != null) {
 
-                    Profile profile = dbPlayer.getCurrentProfile();
+                Profile profile = dbPlayer.getCurrentProfile();
 
-                    if (profile != null && profile.getPassives() != null)
-                        profile.getPassives().forEach(passive -> {
+                if (profile != null && profile.getPassives() != null)
+                    profile.getPassives().forEach(passive -> {
 
-                            if (passive instanceof TickPassive)
-                                ((TickPassive) passive).onTick();
+                        if (passive instanceof TickPassive)
+                            ((TickPassive) passive).onTick();
 
-                        });
+                    });
 
-                }
+            }
 
-            });
-
-        }, 0, 1);
+        }), 0, 1);
 
     }
 

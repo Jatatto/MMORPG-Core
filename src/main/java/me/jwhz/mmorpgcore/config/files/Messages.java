@@ -32,6 +32,9 @@ public class Messages extends ConfigFile {
     @ConfigValue("messages.status bar")
     public String manaBar = "&4Health: &c%mmorpg_health%/%mmorpg_max_health%                 &3%mmorpg_mana_name%: &b%mmorpg_mana%/%mmorpg_max_mana%";
 
+    @ConfigValue("messages.totem.totem dropped on floor")
+    public String totemDroppedOnFloor = "&aYou have picked up your totem, but you have no room in your inventory. Pick it up before other players can!";
+
     public Messages() {
 
         super("messages");

@@ -42,6 +42,11 @@ public class ManaReductionPassive extends EventPassive<Double> {
             manaConsumeEvent.setAmount(manaConsumeEvent.getAmount() * (1 - reduction));
 
     }
+    @Override
+    public String toString() {
 
+        return "Reduce mana consummation by " +  (reduction * 100) + "%";
+
+    }
 
 }

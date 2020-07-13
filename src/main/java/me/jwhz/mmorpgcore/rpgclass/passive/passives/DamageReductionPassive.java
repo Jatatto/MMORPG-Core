@@ -1,6 +1,5 @@
 package me.jwhz.mmorpgcore.rpgclass.passive.passives;
 
-import me.jwhz.mmorpgcore.events.ManaConsumeEvent;
 import me.jwhz.mmorpgcore.rpgclass.passive.EventPassive;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
@@ -44,5 +43,10 @@ public class DamageReductionPassive extends EventPassive<Double> {
 
     }
 
+    @Override
+    public String toString() {
 
+        return "Reduce damage by " + (reduction * 100) + "%";
+
+    }
 }

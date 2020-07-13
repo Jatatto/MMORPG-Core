@@ -1,6 +1,8 @@
 package me.jwhz.mmorpgcore.command;
 
 import me.jwhz.mmorpgcore.command.commands.ProfileCMD;
+import me.jwhz.mmorpgcore.command.commands.StatsCMD;
+import me.jwhz.mmorpgcore.command.commands.TotemCMD;
 import me.jwhz.mmorpgcore.config.ConfigHandler;
 import me.jwhz.mmorpgcore.manager.Manager;
 import org.bukkit.command.PluginCommand;
@@ -16,6 +18,8 @@ public class CommandManager extends Manager<CommandBase> {
         ConfigHandler.reload(this);
 
         getList().add(new ProfileCMD());
+        getList().add(new TotemCMD());
+        getList().add(new StatsCMD());
 
         for (CommandBase commandInfo : getList()) {
 

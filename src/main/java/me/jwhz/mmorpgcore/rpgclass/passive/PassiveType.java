@@ -8,7 +8,7 @@ import me.jwhz.mmorpgcore.rpgclass.passive.passives.ManaRegenerationPassive;
 public enum PassiveType {
 
     DAMAGE_REDUCTION(DamageReductionPassive.class, "damage reduction"),
-    HEALTH_REGENERATION(HealthRegenerationPassive.class, "health rengeration"),
+    HEALTH_REGENERATION(HealthRegenerationPassive.class, "health regeneration"),
     MANA_REDUCTION(ManaReductionPassive.class, "mana reduction"),
     MANA_REGENERATION(ManaRegenerationPassive.class, "mana regeneration");
 
@@ -18,6 +18,7 @@ public enum PassiveType {
     PassiveType(Class clazz, String... names) {
 
         this.clazz = clazz;
+        this.names = names;
 
     }
 

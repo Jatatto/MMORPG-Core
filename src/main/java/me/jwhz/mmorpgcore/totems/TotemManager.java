@@ -1,17 +1,25 @@
 package me.jwhz.mmorpgcore.totems;
 
 import me.jwhz.mmorpgcore.manager.Manager;
+import me.jwhz.mmorpgcore.profile.DBPlayer;
+import me.jwhz.mmorpgcore.rpgclass.passive.Passive;
 import me.jwhz.mmorpgcore.utils.NBTHelper;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class TotemManager extends Manager<Totem> implements Listener {
@@ -20,9 +28,24 @@ public class TotemManager extends Manager<Totem> implements Listener {
 
         super("totems");
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(core, () -> getList().forEach(Totem::tick), 0, 20);
-
         Bukkit.getPluginManager().registerEvents(this, core);
+
+    }
+
+    public void run() {
+
+        Iterator<Totem> totems = getList().iterator();
+
+        while (totems.hasNext()) {
+
+            Totem totem = totems.next();
+
+            if (totem.getItemEntity() == null)
+                totems.remove();
+            else
+                totem.tick();
+
+        }
 
     }
 
@@ -31,6 +54,13 @@ public class TotemManager extends Manager<Totem> implements Listener {
         return getTotemConfigurations().stream().filter(totem -> totem.getName().equalsIgnoreCase(string)).findFirst().orElse(null);
 
     }
+
+    public TotemConfiguration getTotemConfiguration(ItemStack item) {
+
+        return getTotemConfiguration(NBTHelper.getString("totem", item));
+
+    }
+
 
     public boolean isTotemConfiguration(String string) {
 
@@ -81,18 +111,118 @@ public class TotemManager extends Manager<Totem> implements Listener {
 
     }
 
-    @EventHandler
-    public void onPlaceTotem(PlayerInteractEvent e) {
+    public Totem getTotem(Player player, Entity entity) {
 
-        if (e.getItem() != null && isTotem(e.getItem())) {
-
-            e.setCancelled(true);
-            placeTotem(e.getPlayer(), e.getItem());
-
-            e.getPlayer().getInventory().removeItem(e.getItem());
-
-        }
+        return getList().stream().filter(totem -> player.equals(totem.getPlayer()) && entity.equals(totem.getItemEntity())).findFirst().orElse(null);
 
     }
 
+    public List<Passive> getAdditionalPassives(Player player) {
+
+        Totem totem = null;
+        int priority = 0;
+
+        for (Totem t : getList())
+            if (t.isWithin(player) && t.getTotemConfiguration().getPriorityStatus() > priority) {
+
+                totem = t;
+                priority = t.getTotemConfiguration().getPriorityStatus();
+
+            }
+
+        List<Passive> passives = new ArrayList<>();
+
+        if (totem != null)
+            for (Passive passive : totem.getTotemConfiguration().getBuffs()) {
+
+                passive.setProfile(DBPlayer.getPlayer(player).getCurrentProfile());
+                passives.add(passive);
+
+            }
+
+        return passives;
+
+    }
+
+    @EventHandler
+    public void onTotemPickup(PlayerPickupItemEvent e) {
+
+        for (Totem totem : getList())
+            if (e.getItem().equals(totem.getItemEntity())) {
+
+                if (!totem.canPickup())
+                    e.setCancelled(true);
+                else if (!totem.getPlayer().equals(e.getPlayer()))
+                    e.setCancelled(System.currentTimeMillis() < totem.getOthersPickupTime());
+
+                if (!e.isCancelled())
+                    totem.setItemEntity(null);
+
+                return;
+
+            }
+
+    }
+
+    @EventHandler
+    public void onPlaceTotem(PlayerInteractEvent e) {
+
+        if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
+
+            if (e.getItem() != null && isTotem(e.getItem()) && !hasTotemPlaced(e.getPlayer())) {
+
+                e.setCancelled(true);
+                placeTotem(e.getPlayer(), e.getItem());
+
+                e.getPlayer().getInventory().removeItem(e.getItem());
+
+            }
+
+        }
+/*
+
+        if (hasTotemPlaced(e.getPlayer())) {
+
+            List<Entity> nearby = e.getPlayer().getNearbyEntities(2, 2, 2);
+
+            for (Entity near : nearby)
+                if (near instanceof Item) {
+
+                    Totem totem = getTotem(e.getPlayer(), near);
+
+                    e.setCancelled(true);
+
+                    totem.pickup();
+
+                    if (totem.getMana() > 0) {
+
+                        DBPlayer dbPlayer = DBPlayer.getPlayer(e.getPlayer());
+
+                        dbPlayer.getCurrentProfile().getPlayerStats().setMana(Math.min(dbPlayer.getCurrentProfile().getPlayerStats().getMaxHealth() + totem.getMana(),
+                                dbPlayer.getCurrentProfile().getRPGClass().getManaSettings().getMaxMana()));
+
+                    }
+
+                    if (e.getPlayer().getInventory().firstEmpty() != -1) {
+
+                        e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', totem.getTotemConfiguration().getTotemReturnedMessage()));
+
+                        e.getPlayer().getInventory().addItem(totem.getTotemConfiguration().getItem());
+                        totem.getItemEntity().remove();
+                        totem.setItemEntity(null);
+
+                    } else
+                        e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', totem.getTotemConfiguration().getOutOfManaMessage()));
+
+                    return;
+
+                }
+
+        }
+*/
+
+    }
+
+
 }
+

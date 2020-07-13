@@ -198,7 +198,7 @@ public class PlayerStats extends ProfileData {
 
         document.put("enderchest", BukkitSerialization.itemStackArrayToBase64(player.getEnderChest().getContents()));
         document.put("inventory", BukkitSerialization.itemStackArrayToBase64(player.getInventory().getContents()));
-        document.put("health", player.getHealth());
+        document.put("health", player.getHealth() * getHealthScale());
 
         if (document.containsKey("max health") && profile.getRPGClass() != null)
             document.put("max health", profile.getRPGClass().getMaxHealth());

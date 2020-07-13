@@ -35,6 +35,8 @@ public class ManaManager extends Manager {
 
                     ManaRegenerationEvent manaRegenerationEvent = new ManaRegenerationEvent(dbPlayer, manaSettings.getManaRegeneration());
 
+                    Bukkit.getPluginManager().callEvent(manaRegenerationEvent);
+
                     if (!manaRegenerationEvent.isCancelled())
                         dbPlayer.getCurrentProfile().getPlayerStats()
                                 .setMana(Math.min(dbPlayer.getCurrentProfile().getPlayerStats().getMana() + manaRegenerationEvent.getRegenerationAmount(), manaSettings.getMaxMana()));
@@ -44,6 +46,8 @@ public class ManaManager extends Manager {
                 }
 
             }
+
+            core.totemManager.run();
 
         }, 0, 20);
 

@@ -9,6 +9,7 @@ import me.jwhz.mmorpgcore.profile.PlayerManager;
 import me.jwhz.mmorpgcore.rpgclass.RPGClassManager;
 import me.jwhz.mmorpgcore.rpgclass.health.HealthManager;
 import me.jwhz.mmorpgcore.rpgclass.mana.ManaManager;
+import me.jwhz.mmorpgcore.totems.TotemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,11 +26,14 @@ public final class MMORPGCore extends JavaPlugin {
     public MMORPGCorePlaceholderExpansion mmorpgCorePlaceholderExpansion;
 
     private List<Manager> managers;
+
     public RPGClassManager rpgClassManager;
     public CommandManager commandManager;
     public HealthManager healthManager;
     public PlayerManager playerManager;
+    public TotemManager totemManager;
     public ManaManager manaManager;
+
     public Messages messages;
     public Config config;
 
@@ -47,6 +51,7 @@ public final class MMORPGCore extends JavaPlugin {
         managers.add((commandManager = new CommandManager()));
         managers.add((healthManager = new HealthManager()));
         managers.add((playerManager = new PlayerManager()));
+        managers.add((totemManager = new TotemManager()));
         managers.add((manaManager = new ManaManager()));
 
         this.messages = new Messages();

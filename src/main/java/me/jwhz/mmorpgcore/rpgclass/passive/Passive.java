@@ -9,7 +9,6 @@ public abstract class Passive<T> {
 
     protected Profile profile;
     protected ConfigurationSection section;
-    protected Totem totem;
 
     public Passive(ConfigurationSection section) {
 
@@ -26,18 +25,6 @@ public abstract class Passive<T> {
     public void setProfile(Profile profile) {
 
         this.profile = profile;
-
-    }
-
-    public Totem getTotem() {
-
-        return totem;
-
-    }
-
-    public void setTotem(Totem totem) {
-
-        this.totem = totem;
 
     }
 

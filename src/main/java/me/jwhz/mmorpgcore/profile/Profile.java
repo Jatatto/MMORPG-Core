@@ -60,30 +60,18 @@ public class Profile {
 
     public List<Passive> getPassives() {
 
-        return passives;
+        List<Passive> passiveList = new ArrayList<>();
+
+        passiveList.addAll(passives);
+        passiveList.addAll(core.totemManager.getAdditionalPassives(Bukkit.getPlayer(getOwner())));
+
+        return passiveList;
 
     }
 
     public RPGClass getRPGClass() {
 
-        if (data.containsKey("rpgclass")) {
-
-            RPGClass rpgClass = core.rpgClassManager.getRPGClass(data.getString("rpgclass"));
-
-            if (rpgClass != null) {
-
-                passives = rpgClass.getPassives();
-
-                for (Passive passive : passives)
-                    passive.setProfile(this);
-
-            }
-
-            return rpgClass;
-
-        }
-
-        return null;
+        return data.containsKey("rpgclass") ? core.rpgClassManager.getRPGClass(data.getString("rpgclass")) : null;
 
     }
 
@@ -127,6 +115,17 @@ public class Profile {
 
         if (getRPGClass() == null)
             new SelectClassGUI(player);
+        else {
+
+            this.passives = getRPGClass().getPassives();
+
+            if (passives == null)
+                passives = new ArrayList<>();
+
+            for (Passive passive : passives)
+                passive.setProfile(this);
+
+        }
 
     }
 

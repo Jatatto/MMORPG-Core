@@ -56,9 +56,9 @@ public class RPGClass extends ManagerObject<File> {
             for (String key : yamlConfiguration.getConfigurationSection("passives").getKeys(false)) {
 
                 ConfigurationSection configurationSection = yamlConfiguration.getConfigurationSection("passives." + key);
-                if (configurationSection.isSet("passive-type")) {
+                if (configurationSection.isSet("type")) {
 
-                    PassiveType type = PassiveType.getByName(configurationSection.getString("passive-type"));
+                    PassiveType type = PassiveType.getByName(configurationSection.getString("type"));
 
                     try {
 

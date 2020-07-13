@@ -42,4 +42,12 @@ public class HealthRegenerationPassive extends EventPassive<Double> {
         buffs.add(buff);
 
     }
+
+    @Override
+    public String toString() {
+
+        return "Increase health regeneration by " +  (regenerationBoost * 100) + "%";
+
+    }
+
 }
