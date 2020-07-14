@@ -5,6 +5,7 @@ import me.jwhz.mmorpgcore.MMORPGCore;
 import me.jwhz.mmorpgcore.events.PlayerLevelUpEvent;
 import me.jwhz.mmorpgcore.profile.DBPlayer;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -33,30 +34,31 @@ public class LevelListeners implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityHit(EntityDamageByEntityEvent e) {
 
-        if (e.getDamager() instanceof Player) {
+        if (!(e.getEntity() instanceof ArmorStand) && e.getDamager() instanceof Player && !e.isCancelled()) {
 
             boolean negative = Math.random() >= .5;
 
-            double angle = (negative ? -1 : 1) * e.getEntity().getLocation().getDirection().angle(e.getDamager().getLocation().getDirection());
+            double angle = e.getEntity().getLocation().getDirection().angle(e.getDamager().getLocation().getDirection()) + Math.toRadians(negative ? 90 : -90);
 
-            double yAdd = random.nextDouble(.5, 1.25);
+            double yAdd = random.nextDouble(-1, -0.1);
 
             ArmorStand armorStand = (ArmorStand) e.getDamager().getWorld().spawnEntity(e.getEntity().getLocation().add(
-                    e.getEntity().getWidth() * 1.5 * Math.cos(angle),
+                    Math.cos(angle),
                     yAdd,
-                    e.getEntity().getWidth() * 1.15 * Math.sin(angle)
+                    Math.sin(angle)
             ), EntityType.ARMOR_STAND);
 
             armorStand.setVisible(false);
-            armorStand.setInvulnerable(true);
             armorStand.setGravity(false);
             armorStand.setCanPickupItems(false);
             armorStand.setCustomNameVisible(true);
+            armorStand.setCollidable(false);
+
             armorStand.setCustomName(ChatColor.translateAlternateColorCodes('&',
                     core.config.getDamageHologramText().replace("%damage%", decimalFormat.format(e.getFinalDamage()))
             ));
 
-            core.rpgClassManager.addArmorStand(armorStand, System.currentTimeMillis() + (3 * 1000));
+            core.rpgClassManager.addArmorStand(armorStand, System.currentTimeMillis() + (1000));
 
         }
 
@@ -83,7 +85,6 @@ public class LevelListeners implements Listener {
             DBPlayer player = DBPlayer.getPlayer(e.getEntity().getKiller());
 
             player.getCurrentProfile().getPlayerStats().getLevelInfo().addXp(e.getDroppedExp());
-
 
         }
 

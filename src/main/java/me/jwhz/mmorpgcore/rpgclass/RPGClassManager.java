@@ -20,8 +20,8 @@ public class RPGClassManager extends Manager<RPGClass> {
     private Map<DBPlayer, Profile> profileChanges = new HashMap<>();
     private Map<DBPlayer, Profile> changesQueue = new HashMap<>();
 
-    private Map<Long, ArmorStand> armorStands = new HashMap<>();
-    private Map<Long, ArmorStand> armorStandsQueue = new HashMap<>();
+    private Map<ArmorStand, Long> armorStands = new HashMap<>();
+    private Map<ArmorStand, Long> armorStandsQueue = new HashMap<>();
 
 
     public RPGClassManager() {
@@ -58,15 +58,15 @@ public class RPGClassManager extends Manager<RPGClass> {
             armorStands.putAll(armorStandsQueue);
             armorStandsQueue.clear();
 
-            Iterator<Map.Entry<Long, ArmorStand>> armorStandIterator = armorStands.entrySet().iterator();
+            Iterator<Map.Entry<ArmorStand, Long>> armorStandIterator = armorStands.entrySet().iterator();
 
             while (armorStandIterator.hasNext()) {
 
-                Map.Entry<Long, ArmorStand> armorStand = armorStandIterator.next();
+                Map.Entry<ArmorStand, Long> armorStand = armorStandIterator.next();
 
-                if (armorStand.getKey() <= System.currentTimeMillis()) {
+                if (armorStand.getValue() <= System.currentTimeMillis()) {
 
-                    armorStand.getValue().remove();
+                    armorStand.getKey().remove();
                     armorStandIterator.remove();
 
                 }
@@ -101,7 +101,7 @@ public class RPGClassManager extends Manager<RPGClass> {
 
     public void addArmorStand(ArmorStand armorStand, Long due) {
 
-        armorStandsQueue.put(due, armorStand);
+        armorStandsQueue.put(armorStand, due);
 
     }
 
@@ -132,6 +132,20 @@ public class RPGClassManager extends Manager<RPGClass> {
 
     }
 
+    @Override
+    public void onDisable() {
+
+        for (ArmorStand armorStand : armorStands.keySet())
+            armorStand.remove();
+
+        armorStands.clear();
+
+        for (ArmorStand armorStand : armorStandsQueue.keySet())
+            armorStand.remove();
+
+        armorStandsQueue.clear();
+
+    }
 
     @EventHandler
     public void onLevelUp(PlayerLevelUpEvent e) {
