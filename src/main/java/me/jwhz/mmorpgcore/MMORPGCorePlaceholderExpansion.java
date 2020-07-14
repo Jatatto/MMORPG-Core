@@ -5,7 +5,10 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.jwhz.mmorpgcore.profile.DBPlayer;
 import me.jwhz.mmorpgcore.profile.Profile;
 import me.jwhz.mmorpgcore.rpgclass.RPGClass;
+import me.jwhz.mmorpgcore.rpgclass.levels.Level;
 import org.bukkit.entity.Player;
+
+import java.text.DecimalFormat;
 
 public class MMORPGCorePlaceholderExpansion extends PlaceholderExpansion {
 
@@ -58,6 +61,33 @@ public class MMORPGCorePlaceholderExpansion extends PlaceholderExpansion {
     public String onPlaceholderRequest(Player player, String value) {
 
         DBPlayer dbPlayer = DBPlayer.getPlayer(player);
+
+        DecimalFormat levelFormat = new DecimalFormat("#,###");
+
+        if (value.startsWith("level")) {
+
+            if (value.contains("_")) {
+
+                String subValue = value.split("_")[1];
+
+                Level levelInfo = dbPlayer.getCurrentProfile().getPlayerStats().getLevelInfo();
+
+                if (subValue.equalsIgnoreCase("nextlevel"))
+                    return levelFormat.format(levelInfo.getNextLevel());
+
+                if (subValue.equalsIgnoreCase("requirement"))
+                    return levelFormat.format(levelInfo.getLevelSystem().getLevelRequirement(levelInfo.getNextLevel()));
+
+                if (subValue.equalsIgnoreCase("totalxp"))
+                    return levelFormat.format(levelInfo.getTotalXp());
+
+                if (subValue.equalsIgnoreCase("currentxp"))
+                    return levelFormat.format(levelInfo.getCurrentXp());
+
+            } else
+                return levelFormat.format(dbPlayer.getCurrentProfile().getPlayerStats().getLevelInfo().getLevel());
+
+        }
 
         if (value.equalsIgnoreCase("max_health"))
             return "" + (int) dbPlayer.getCurrentProfile().getPlayerStats().getMaxHealth();

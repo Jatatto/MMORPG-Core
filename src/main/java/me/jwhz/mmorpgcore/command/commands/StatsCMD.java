@@ -1,6 +1,7 @@
 package me.jwhz.mmorpgcore.command.commands;
 
 import me.jwhz.mmorpgcore.command.CommandBase;
+import me.jwhz.mmorpgcore.gui.guis.LevelsGUI;
 import me.jwhz.mmorpgcore.profile.DBPlayer;
 import me.jwhz.mmorpgcore.rpgclass.passive.Passive;
 import org.bukkit.command.Command;
@@ -22,6 +23,16 @@ public class StatsCMD extends CommandBase {
 
             for (Passive passive : dbPlayer.getCurrentProfile().getPassives())
                 dbPlayer.sendMessage("&a- " + passive.toString());
+
+            return;
+
+        }
+
+        if (args[0].equalsIgnoreCase("levels")) {
+
+            new LevelsGUI(dbPlayer.getPlayer());
+
+            return;
 
         }
 

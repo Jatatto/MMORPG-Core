@@ -3,6 +3,7 @@ package me.jwhz.mmorpgcore.profile.profiledata;
 import me.jwhz.mmorpgcore.MMORPGCore;
 import me.jwhz.mmorpgcore.profile.DBPlayer;
 import me.jwhz.mmorpgcore.profile.Profile;
+import me.jwhz.mmorpgcore.rpgclass.levels.Level;
 import me.jwhz.mmorpgcore.utils.BukkitSerialization;
 import org.bson.Document;
 import org.bukkit.Bukkit;
@@ -19,9 +20,22 @@ import java.util.Objects;
 
 public class PlayerStats extends ProfileData {
 
+    private Level levelInfo;
+
     public PlayerStats(Profile profile, Document document) {
 
         super(profile, document, "player stats");
+
+    }
+
+    public Level getLevelInfo() {
+
+        return levelInfo != null ?
+                levelInfo :
+                (levelInfo = (document.containsKey("level info") ?
+                        new Level(profile, (Document) document.get("level info"))
+                        : new Level(profile)
+                ));
 
     }
 
@@ -146,6 +160,9 @@ public class PlayerStats extends ProfileData {
 
         }
 
+        if (profile.getRPGClass() != null)
+            getLevelInfo();
+
         player.getEnderChest().clear();
 
         if (document.containsKey("enderchest"))
@@ -210,6 +227,8 @@ public class PlayerStats extends ProfileData {
         xp.put("xp level", player.getLevel());
         xp.put("current xp", player.getExp() + "");
 
+        if (levelInfo != null)
+            document.put("level info", levelInfo.getDocument());
         document.put("xp", xp);
 
         if (player.getActivePotionEffects().size() > 0) {

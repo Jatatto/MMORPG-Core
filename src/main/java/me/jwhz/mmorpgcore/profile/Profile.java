@@ -80,6 +80,10 @@ public class Profile {
         data.put("rpgclass", rpgClass.getClassName());
 
         this.passives = rpgClass.getPassives();
+        playerStats.setMaxHealth(rpgClass.getMaxHealth());
+        playerStats.setHealth(playerStats.getHealthScale() * Bukkit.getPlayer(getOwner()).getHealth());
+
+        playerStats.getLevelInfo();
 
     }
 

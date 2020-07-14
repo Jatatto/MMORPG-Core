@@ -3,6 +3,7 @@ package me.jwhz.mmorpgcore.database;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
 
 import me.jwhz.mmorpgcore.config.ConfigFile;

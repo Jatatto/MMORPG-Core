@@ -1,6 +1,7 @@
 package me.jwhz.mmorpgcore.rpgclass;
 
 import me.jwhz.mmorpgcore.manager.ManagerObject;
+import me.jwhz.mmorpgcore.rpgclass.levels.LevelSystem;
 import me.jwhz.mmorpgcore.rpgclass.mana.ManaSettings;
 import me.jwhz.mmorpgcore.rpgclass.passive.Passive;
 import me.jwhz.mmorpgcore.rpgclass.passive.PassiveType;
@@ -19,11 +20,14 @@ public class RPGClass extends ManagerObject<File> {
 
     private File file;
     private YamlConfiguration yamlConfiguration;
+    private LevelSystem levelSystem;
 
     public RPGClass(File file) {
 
         this.file = file;
         this.yamlConfiguration = YamlConfiguration.loadConfiguration(file);
+
+        getLevelSystem().getLevelRequirement(getLevelSystem().getMaxLevel());
 
     }
 
@@ -39,6 +43,17 @@ public class RPGClass extends ManagerObject<File> {
             return BukkitSerialization.convertSection(yamlConfiguration.getConfigurationSection("gui item"));
 
         return ItemFactory.build(UMaterial.PAPER, getClassName(), "Edited in config....");
+
+    }
+
+    public LevelSystem getLevelSystem() {
+
+        return levelSystem != null ?
+                levelSystem :
+                (levelSystem = (yamlConfiguration.isSet("level system") ?
+                        new LevelSystem(yamlConfiguration.getConfigurationSection("level system")) :
+                        new LevelSystem("1.25(n-1)", 50, 100)
+                ));
 
     }
 

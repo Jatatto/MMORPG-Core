@@ -1,5 +1,6 @@
 package me.jwhz.mmorpgcore.profile;
 
+import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import me.jwhz.mmorpgcore.manager.Manager;
 import org.bson.Document;
 import org.bukkit.Bukkit;
@@ -98,7 +99,7 @@ public class PlayerManager extends Manager<DBPlayer> implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
 
-        loadPlayer(e.getPlayer());
+        Bukkit.getScheduler().runTaskLater(core, () -> loadPlayer(e.getPlayer()), 1);
 
     }
 

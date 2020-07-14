@@ -9,13 +9,11 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class ItemFactory {
 
-    public static ItemStack build(UMaterial material, int amount, String displayName, List<String> enchants, int customModel, String... lore) {
+    public static ItemStack build(UMaterial material, int amount, String displayName, List<String> enchants, int customModel, boolean hideEnchants, String... lore) {
 
         ItemStack item = material.getItemStack();
         item.setAmount(amount);
@@ -44,6 +42,9 @@ public class ItemFactory {
 
         }
 
+        if (hideEnchants)
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
         if (customModel != -1)
             meta.setCustomModelData(-1);
 
@@ -53,9 +54,15 @@ public class ItemFactory {
 
     }
 
+    public static ItemStack fakeGlow(UMaterial material, String displayName, String... lore) {
+
+        return build(material, 1, displayName, Arrays.asList(Enchantment.DURABILITY.getName() + ",1"), -1, true, lore);
+
+    }
+
     public static ItemStack build(UMaterial material, String displayName, String... lore) {
 
-        return build(material, 1, displayName, new ArrayList<>(), -1, lore);
+        return build(material, 1, displayName, new ArrayList<>(), -1, false, lore);
 
     }
 
@@ -88,7 +95,7 @@ public class ItemFactory {
 
     }
 
-    public static ItemStack replaceVariables(Player player, ItemStack item, String with, String what) {
+    public static ItemStack replaceVariables(Player player, ItemStack item, Map<String, String> variables) {
 
         ItemStack itemStack = item.clone();
 
@@ -97,15 +104,29 @@ public class ItemFactory {
 
         ItemMeta meta = itemStack.getItemMeta();
 
-        if (meta.hasDisplayName())
-            meta.setDisplayName(PlaceholderAPI.setPlaceholders(player, meta.getDisplayName().replace(what, with)));
+        if (meta.hasDisplayName()) {
+
+            String name = meta.getDisplayName();
+
+            for (Map.Entry<String, String> entry : variables.entrySet())
+                name = name.replace(entry.getKey(), entry.getValue());
+
+            meta.setDisplayName(PlaceholderAPI.setPlaceholders(player, name));
+
+        }
 
         if (meta.hasLore()) {
 
             List<String> lore = new ArrayList<>();
 
-            for (String line : meta.getLore())
-                lore.add(PlaceholderAPI.setPlaceholders(player, line.replace(what, with)));
+            for (String line : meta.getLore()) {
+
+                for (Map.Entry<String, String> entry : variables.entrySet())
+                    line = line.replace(entry.getKey(), entry.getValue());
+
+                lore.add(PlaceholderAPI.setPlaceholders(player, line));
+
+            }
 
             meta.setLore(lore);
 
@@ -114,6 +135,15 @@ public class ItemFactory {
         itemStack.setItemMeta(meta);
 
         return itemStack;
+
+    }
+
+    public static ItemStack replaceVariable(Player player, ItemStack item, String key, String value) {
+
+        Map<String, String> variables = new HashMap<>();
+        variables.put(key, value);
+
+        return replaceVariables(player, item, variables);
 
     }
 

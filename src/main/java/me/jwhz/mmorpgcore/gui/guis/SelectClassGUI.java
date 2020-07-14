@@ -66,7 +66,7 @@ public class SelectClassGUI extends GUI {
         DBPlayer dbPlayer = DBPlayer.getPlayer((Player) e.getPlayer());
 
         if (dbPlayer != null && dbPlayer.getCurrentProfile() != null && dbPlayer.getCurrentProfile().getRPGClass() == null)
-            Bukkit.getScheduler().scheduleSyncDelayedTask(core, () -> {
+            Bukkit.getScheduler().runTaskLater(core, () -> {
                 new SelectClassGUI((Player) e.getPlayer());
                 e.getPlayer().sendMessage(core.messages.selectClass);
             }, 1);

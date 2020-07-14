@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -221,6 +222,9 @@ public class BukkitSerialization {
                 for (Map.Entry<Enchantment, Integer> pair : itemMeta.getEnchants().entrySet())
                     enchants.add(pair.getKey().getName() + "," + pair.getValue());
 
+            if (itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES))
+                section.put("hide enchants", true);
+
             section.put("enchants", enchants);
 
             section.put("custom model", itemMeta.hasCustomModelData() ? itemMeta.getCustomModelData() : -1);
@@ -251,6 +255,9 @@ public class BukkitSerialization {
             meta.setLore(lore);
 
         }
+
+        if (section.containsKey("hide enchants") && (boolean) section.get("hide enchants"))
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         if (section.containsKey("enchants"))
             for (String enchant : (List<String>) section.get("enchants")) {
@@ -291,6 +298,10 @@ public class BukkitSerialization {
             meta.setLore(lore);
 
         }
+
+        if (section.contains("hide enchants") && section.getBoolean("hide enchants"))
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
         if (section.contains("enchants"))
             for (String enchant : section.getStringList("enchants")) {
 

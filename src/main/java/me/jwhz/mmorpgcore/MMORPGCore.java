@@ -43,7 +43,6 @@ public final class MMORPGCore extends JavaPlugin {
         instance = this;
 
         this.database = new MongoDB();
-        database = new MongoDB();
 
         managers = new ArrayList<>();
 

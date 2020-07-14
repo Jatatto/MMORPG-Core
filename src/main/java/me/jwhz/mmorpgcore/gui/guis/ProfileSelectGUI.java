@@ -139,10 +139,10 @@ public class ProfileSelectGUI extends GUI {
             if (profile != null)
                 item =
                         dbPlayer.getCurrentProfile().getProfileUUID().equals(profile.getProfileUUID()) ?
-                                ItemFactory.replaceVariables(player, currentProfile, entry.getValue(), "<profile>") :
-                                ItemFactory.replaceVariables(player, hasProfile, entry.getValue(), "<profile>");
+                                ItemFactory.replaceVariable(player, currentProfile, entry.getValue(), "<profile>") :
+                                ItemFactory.replaceVariable(player, hasProfile, entry.getValue(), "<profile>");
             else
-                item = ItemFactory.replaceVariables(player, emptyProfile, entry.getValue(), "<profile>");
+                item = ItemFactory.replaceVariable(player, emptyProfile, entry.getValue(), "<profile>");
 
             inventory.setItem(Integer.parseInt(entry.getKey()), item);
 
