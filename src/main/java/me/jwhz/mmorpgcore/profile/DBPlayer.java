@@ -1,6 +1,7 @@
 package me.jwhz.mmorpgcore.profile;
 
 import com.mongodb.BasicDBObject;
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.jwhz.mmorpgcore.MMORPGCore;
 import me.jwhz.mmorpgcore.manager.ManagerObject;
 import me.jwhz.mmorpgcore.events.PlayerChangeProfileEvent;
@@ -199,7 +200,7 @@ public class DBPlayer extends ManagerObject<UUID> {
 
     public void sendMessage(String message) {
 
-        getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(getPlayer(), message)));
 
     }
 

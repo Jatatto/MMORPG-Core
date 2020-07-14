@@ -1,3 +1,4 @@
+damage hologram text: '&c%damage%'
 profiles:
     new profile spawn:
         x: 5

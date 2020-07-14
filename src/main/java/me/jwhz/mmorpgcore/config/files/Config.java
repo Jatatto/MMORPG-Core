@@ -17,6 +17,12 @@ public class Config {
 
     }
 
+    public String getDamageHologramText() {
+
+        return core.getConfig().getString("damage hologram text", "&c%damage%");
+
+    }
+
     public Location getNewProfileSpawn() {
 
         return getLocation(core.getConfig().getConfigurationSection("profiles.new profile spawn"));

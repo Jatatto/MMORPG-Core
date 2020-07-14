@@ -37,6 +37,15 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-tree:8.0.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-analysis:8.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.udojava:EvalEx:2.5" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: io.lumine.xikage.mythicmobs:MythicMobs:4.9.0">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/MythicMobs-4.9.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-sync:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:bson:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-core:4.0.1" level="project" />

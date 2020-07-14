@@ -69,12 +69,12 @@ public class Level {
         long currentXp = getCurrentXp() + xp;
         long levelRequirement = levelSystem.getLevelRequirement(getLevel() + 1);
 
-        if (currentXp > levelRequirement) {
-
-            Bukkit.getPluginManager().callEvent(new PlayerLevelUpEvent(DBPlayer.getPlayer(profile.getOwner()), this));
+        if (currentXp > levelRequirement && getLevel() != getLevelSystem().getMaxLevel()) {
 
             document.put("current xp", currentXp - levelRequirement);
             document.put("level", getLevel() + 1);
+
+            Bukkit.getPluginManager().callEvent(new PlayerLevelUpEvent(DBPlayer.getPlayer(profile.getOwner()), this));
 
         } else
             document.put("current xp", currentXp);
