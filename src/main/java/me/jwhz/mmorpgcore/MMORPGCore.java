@@ -1,5 +1,7 @@
 package me.jwhz.mmorpgcore;
 
+import com.elmakers.mine.bukkit.api.magic.MagicAPI;
+import de.erethon.dungeonsxl.DungeonsXL;
 import me.jwhz.mmorpgcore.command.CommandManager;
 import me.jwhz.mmorpgcore.config.files.Config;
 import me.jwhz.mmorpgcore.config.files.Messages;
@@ -22,6 +24,8 @@ public final class MMORPGCore extends JavaPlugin {
     private static MMORPGCore instance;
 
     public MongoDB database;
+    public MagicAPI magicAPI;
+    public DungeonsXL dungeonsXL;
 
     public MMORPGCorePlaceholderExpansion mmorpgCorePlaceholderExpansion;
 
@@ -43,6 +47,14 @@ public final class MMORPGCore extends JavaPlugin {
         instance = this;
 
         this.database = new MongoDB();
+
+        if (Bukkit.getPluginManager().getPlugin("Magic") != null)
+            this.magicAPI = (MagicAPI) Bukkit.getPluginManager().getPlugin("Magic");
+
+
+
+        if (Bukkit.getPluginManager().getPlugin("DungeonsXL") != null)
+            this.dungeonsXL = (DungeonsXL) Bukkit.getPluginManager().getPlugin("DungeonsXL");
 
         managers = new ArrayList<>();
 

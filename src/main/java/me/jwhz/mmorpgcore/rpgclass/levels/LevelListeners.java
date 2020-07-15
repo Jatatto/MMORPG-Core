@@ -36,17 +36,15 @@ public class LevelListeners implements Listener {
 
         if (!(e.getEntity() instanceof ArmorStand) && e.getDamager() instanceof Player && !e.isCancelled()) {
 
-            boolean negative = Math.random() >= .5;
+            double angle = Math.random() * (Math.PI * 2);
 
-            double angle = e.getEntity().getLocation().getDirection().angle(e.getDamager().getLocation().getDirection()) + Math.toRadians(negative ? 90 : -90);
-
-            double yAdd = random.nextDouble(-1, -0.1);
+            double yRemove = random.nextDouble(0.3, 1.1);
 
             ArmorStand armorStand = (ArmorStand) e.getDamager().getWorld().spawnEntity(e.getEntity().getLocation().add(
                     Math.cos(angle),
-                    yAdd,
+                    0,
                     Math.sin(angle)
-            ), EntityType.ARMOR_STAND);
+            ).subtract(0, yRemove, 0), EntityType.ARMOR_STAND);
 
             armorStand.setVisible(false);
             armorStand.setGravity(false);

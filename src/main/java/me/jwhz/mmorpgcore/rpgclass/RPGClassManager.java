@@ -8,6 +8,7 @@ import me.jwhz.mmorpgcore.rpgclass.levels.LevelListeners;
 import me.jwhz.mmorpgcore.rpgclass.passive.PassiveListeners;
 import me.jwhz.mmorpgcore.rpgclass.passive.TickPassive;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.EventHandler;
 
@@ -68,6 +69,11 @@ public class RPGClassManager extends Manager<RPGClass> {
 
                     armorStand.getKey().remove();
                     armorStandIterator.remove();
+
+                } else if (armorStand.getValue() <= System.currentTimeMillis() + 500) {
+
+                    double fall = (armorStand.getValue() - System.currentTimeMillis()) / 1000.0;
+                    armorStand.getKey().teleport(armorStand.getKey().getLocation().subtract(0, fall, 0));
 
                 }
 

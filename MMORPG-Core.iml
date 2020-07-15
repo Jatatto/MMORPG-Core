@@ -46,6 +46,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.elmakers.mine.bukkit:MagicAPI:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-sync:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:bson:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-core:4.0.1" level="project" />
@@ -59,5 +60,14 @@
       </library>
     </orderEntry>
     <orderEntry type="library" scope="PROVIDED" name="Maven: me.clip:placeholderapi:2.8.1" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: de.erethon.dungeonsxl:dungeonsxl-api:0.18-SNAPSHOT">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/dungeonsxl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
