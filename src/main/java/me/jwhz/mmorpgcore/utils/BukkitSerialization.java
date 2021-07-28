@@ -1,6 +1,5 @@
 package me.jwhz.mmorpgcore.utils;
 
-import me.jwhz.mmorpgcore.utils.materials.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,7 +18,6 @@ import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.DoubleBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -206,7 +204,7 @@ public class BukkitSerialization {
 
         Map<String, Object> section = new HashMap<>();
 
-        section.put("material", UMaterial.match(item).getVersionName());
+        section.put("material", item.getType().name());
         section.put("amount", item.getAmount());
 
         if (item.hasItemMeta()) {
@@ -237,7 +235,7 @@ public class BukkitSerialization {
 
     public static ItemStack convertMap(Map<String, Object> section) {
 
-        ItemStack item = UMaterial.match(String.valueOf(section.get("material"))).getItemStack();
+        ItemStack item = new ItemStack(Material.valueOf(String.valueOf(section.get("material"))));
         item.setAmount((Integer) section.get("amount"));
 
         ItemMeta meta = item.getItemMeta();
@@ -280,7 +278,7 @@ public class BukkitSerialization {
 
     public static ItemStack convertSection(ConfigurationSection section) {
 
-        ItemStack item = UMaterial.match(section.getString("material")).getItemStack();
+        ItemStack item = new ItemStack(Material.valueOf(String.valueOf(section.get("material"))));
         item.setAmount(section.getInt("amount"));
 
         ItemMeta meta = item.getItemMeta();

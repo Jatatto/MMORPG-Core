@@ -19,6 +19,8 @@ public class NBTHelper {
             tags.setInt(key, (Integer) value);
         else if (value instanceof Boolean)
             tags.setBoolean(key, (Boolean) value);
+        else if (value instanceof Long)
+            tags.setLong(key, (Long) value);
 
         return (item = CraftItemStack.asBukkitCopy(itemStack));
 
@@ -32,6 +34,17 @@ public class NBTHelper {
             return tags.getInt(key);
 
         return 1;
+
+    }
+
+    public static long getLong(String key, ItemStack item) {
+
+        NBTTagCompound tags = CraftItemStack.asNMSCopy(item).getOrCreateTag();
+
+        if (tags.hasKey(key))
+            return tags.getLong(key);
+
+        return 0l;
 
     }
 

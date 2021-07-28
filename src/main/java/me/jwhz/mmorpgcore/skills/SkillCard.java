@@ -15,6 +15,12 @@ public class SkillCard extends ManagerObject<String> {
 
     }
 
+    public String getSpellName() {
+
+        return section.getString("spell name");
+
+    }
+
     public double getCost() {
 
         return section.getDouble("cost", 50);

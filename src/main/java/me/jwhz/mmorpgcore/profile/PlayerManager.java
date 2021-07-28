@@ -55,7 +55,7 @@ public class PlayerManager extends Manager<DBPlayer> implements Listener {
 
         DBPlayer dbPlayer = new DBPlayer(player);
 
-        Document document = core.database.getPlayer(player.getUniqueId());
+        Document document = core.getDatabase().getPlayer(player.getUniqueId());
 
         if (document == null)
             document = new Document("uuid", player.getUniqueId().toString());
@@ -75,7 +75,7 @@ public class PlayerManager extends Manager<DBPlayer> implements Listener {
         } else if (dbPlayer.getLastPlayed() != null)
             dbPlayer.setCurrentProfile(dbPlayer.getLastPlayed());
 
-        dbPlayer.sendMessage(core.messages.profileLoaded.replace("%profile%", dbPlayer.getCurrentProfile().getProfileName()));
+        dbPlayer.sendMessage(core.getMessages().profileLoaded.replace("%profile%", dbPlayer.getCurrentProfile().getProfileName()));
 
     }
 

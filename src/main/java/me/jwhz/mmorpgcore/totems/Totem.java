@@ -34,7 +34,7 @@ public class Totem extends ManagerObject<Location> {
         this.itemEntity = itemEntity;
 
         this.lastsFor = (int) Math.round((mana / totemConfiguration.getManaPerSecond()) + 0.49);
-        this.othersPickupTime = System.currentTimeMillis() + ((lastsFor + totemConfiguration.getPickupDelay()) * 1000);
+        this.othersPickupTime = System.currentTimeMillis() + ((lastsFor + totemConfiguration.getPickupDelay()) * 1000L);
         this.startingAngle = 0;
         this.allowPickup = false;
 
@@ -72,7 +72,7 @@ public class Totem extends ManagerObject<Location> {
 
                 getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', totemConfiguration.getOutOfManaMessage()));
 
-                othersPickupTime = System.currentTimeMillis() + (totemConfiguration.getPickupDelay() * 1000);
+                othersPickupTime = System.currentTimeMillis() + (totemConfiguration.getPickupDelay() * 1000L);
 
                 this.itemEntity.setCustomName(ChatColor.translateAlternateColorCodes('&', totemConfiguration.getPickupName()));
 
@@ -110,7 +110,7 @@ public class Totem extends ManagerObject<Location> {
 
             this.allowPickup = true;
 
-            othersPickupTime = System.currentTimeMillis() + (totemConfiguration.getPickupDelay() * 1000);
+            othersPickupTime = System.currentTimeMillis() + (totemConfiguration.getPickupDelay() * 1000L);
 
             this.itemEntity.setCustomName(ChatColor.translateAlternateColorCodes('&', totemConfiguration.getPickupName()));
 

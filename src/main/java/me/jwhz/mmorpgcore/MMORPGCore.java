@@ -11,10 +11,12 @@ import me.jwhz.mmorpgcore.profile.PlayerManager;
 import me.jwhz.mmorpgcore.rpgclass.RPGClassManager;
 import me.jwhz.mmorpgcore.rpgclass.health.HealthManager;
 import me.jwhz.mmorpgcore.rpgclass.mana.ManaManager;
+import me.jwhz.mmorpgcore.skills.SkillCardManager;
 import me.jwhz.mmorpgcore.totems.TotemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,23 +25,22 @@ public final class MMORPGCore extends JavaPlugin {
 
     private static MMORPGCore instance;
 
-    public MongoDB database;
-    public MagicAPI magicAPI;
-    public DungeonsXL dungeonsXL;
+    private MongoDB database;
+    private MagicAPI magicAPI;
 
     public MMORPGCorePlaceholderExpansion mmorpgCorePlaceholderExpansion;
 
     private List<Manager> managers;
 
-    public RPGClassManager rpgClassManager;
-    public CommandManager commandManager;
-    public HealthManager healthManager;
-    public PlayerManager playerManager;
-    public TotemManager totemManager;
-    public ManaManager manaManager;
-
-    public Messages messages;
-    public Config config;
+    private SkillCardManager skillCardManager;
+    private RPGClassManager rpgClassManager;
+    private CommandManager commandManager;
+    private HealthManager healthManager;
+    private PlayerManager playerManager;
+    private TotemManager totemManager;
+    private ManaManager manaManager;
+    private Messages messages;
+    private Config config;
 
     @Override
     public void onEnable() {
@@ -51,13 +52,9 @@ public final class MMORPGCore extends JavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("Magic") != null)
             this.magicAPI = (MagicAPI) Bukkit.getPluginManager().getPlugin("Magic");
 
-
-
-        if (Bukkit.getPluginManager().getPlugin("DungeonsXL") != null)
-            this.dungeonsXL = (DungeonsXL) Bukkit.getPluginManager().getPlugin("DungeonsXL");
-
         managers = new ArrayList<>();
 
+        managers.add((skillCardManager = new SkillCardManager()));
         managers.add((rpgClassManager = new RPGClassManager()));
         managers.add((commandManager = new CommandManager()));
         managers.add((healthManager = new HealthManager()));
@@ -94,10 +91,45 @@ public final class MMORPGCore extends JavaPlugin {
 
     }
 
+    public MongoDB getDatabase() {
+        return database;
+    }
+
+    public SkillCardManager getSkillCardManager() {
+        return skillCardManager;
+    }
+    public RPGClassManager getRpgClassManager() {
+        return rpgClassManager;
+    }
+    public CommandManager getCommandManager() {
+        return commandManager;
+    }
+    public HealthManager getHealthManager() {
+        return healthManager;
+    }
+    public PlayerManager getPlayerManager() {
+        return playerManager;
+    }
+    public TotemManager getTotemManager() {
+        return totemManager;
+    }
+    public ManaManager getManaManager() {
+        return manaManager;
+    }
+    public Messages getMessages() {
+        return messages;
+    }
+    public Config getConfigFile() {
+        return config;
+    }
+
     public static MMORPGCore getInstance() {
 
         return instance;
 
     }
 
+    public MagicAPI getMagicAPI() {
+        return magicAPI;
+    }
 }

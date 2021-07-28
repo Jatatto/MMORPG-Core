@@ -1,8 +1,8 @@
 package me.jwhz.mmorpgcore.utils;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.jwhz.mmorpgcore.utils.materials.UMaterial;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -13,9 +13,9 @@ import java.util.*;
 
 public class ItemFactory {
 
-    public static ItemStack build(UMaterial material, int amount, String displayName, List<String> enchants, int customModel, boolean hideEnchants, String... lore) {
+    public static ItemStack build(Material material, int amount, String displayName, List<String> enchants, int customModel, boolean hideEnchants, String... lore) {
 
-        ItemStack item = material.getItemStack();
+        ItemStack item = new ItemStack(material);
         item.setAmount(amount);
 
         ItemMeta meta = item.getItemMeta();
@@ -54,13 +54,13 @@ public class ItemFactory {
 
     }
 
-    public static ItemStack fakeGlow(UMaterial material, String displayName, String... lore) {
+    public static ItemStack fakeGlow(Material material, String displayName, String... lore) {
 
         return build(material, 1, displayName, Arrays.asList(Enchantment.DURABILITY.getName() + ",1"), -1, true, lore);
 
     }
 
-    public static ItemStack build(UMaterial material, String displayName, String... lore) {
+    public static ItemStack build(Material material, String displayName, String... lore) {
 
         return build(material, 1, displayName, new ArrayList<>(), -1, false, lore);
 

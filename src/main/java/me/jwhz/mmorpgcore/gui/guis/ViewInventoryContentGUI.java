@@ -3,10 +3,9 @@ package me.jwhz.mmorpgcore.gui.guis;
 import me.jwhz.mmorpgcore.config.ConfigHandler;
 import me.jwhz.mmorpgcore.config.ConfigValue;
 import me.jwhz.mmorpgcore.gui.GUI;
-import me.jwhz.mmorpgcore.profile.Profile;
 import me.jwhz.mmorpgcore.utils.ItemFactory;
-import me.jwhz.mmorpgcore.utils.materials.UMaterial;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -20,9 +19,9 @@ public class ViewInventoryContentGUI extends GUI {
     String name = "&aViewing items";
 
     @ConfigValue("gui.view inventory content.items.filler item")
-    ItemStack fillerItem = ItemFactory.build(UMaterial.GRAY_STAINED_GLASS_PANE, "&f");
+    ItemStack fillerItem = ItemFactory.build(Material.GRAY_STAINED_GLASS_PANE, "&f");
     @ConfigValue("gui.view inventory content.items.back arrow")
-    ItemStack backArrow = ItemFactory.build(UMaterial.ARROW, "&cBack");
+    ItemStack backArrow = ItemFactory.build(Material.ARROW, "&cBack");
 
     public ViewInventoryContentGUI(Player player, GUI previous, ItemStack[] content) {
 

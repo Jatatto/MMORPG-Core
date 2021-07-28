@@ -2,6 +2,7 @@ package me.jwhz.mmorpgcore.skills;
 
 import me.jwhz.mmorpgcore.manager.Manager;
 import me.jwhz.mmorpgcore.utils.NBTHelper;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ public class SkillCardManager extends Manager<SkillCard> {
         if (yamlConfiguration.isSet("cards"))
             for (String key : yamlConfiguration.getConfigurationSection("cards").getKeys(false))
                 getList().add(new SkillCard(yamlConfiguration.getConfigurationSection("cards").getConfigurationSection(key)));
+
+        Bukkit.getPluginManager().registerEvents(new SkillCardListener(core), core);
 
     }
 
@@ -46,6 +49,12 @@ public class SkillCardManager extends Manager<SkillCard> {
 
     }
 
+    public boolean isBind(ItemStack item, String bind) {
+
+        return getSkillCardsOnItem(item).stream().anyMatch(card -> bind.equalsIgnoreCase(getBind(item, card)));
+
+    }
+
     public String getBind(ItemStack item, SkillCard skillCard) {
 
         return NBTHelper.getString("bind-" + skillCard.getIdentifier(), item);
@@ -58,10 +67,16 @@ public class SkillCardManager extends Manager<SkillCard> {
 
         cards += card.getIdentifier() + ",";
 
+        if (!NBTHelper.hasTag("previous clicks", item)) {
+
+            item = NBTHelper.addTag("previous clicks", "", item);
+            item = NBTHelper.addTag("last clicked", 0L, item);
+
+        }
+
         item = NBTHelper.addTag("skill cards", cards, item);
         return NBTHelper.addTag("bind-" + card.getIdentifier(), bind, item);
 
     }
-
 
 }

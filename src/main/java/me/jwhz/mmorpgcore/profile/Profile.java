@@ -63,7 +63,7 @@ public class Profile {
         List<Passive> passiveList = new ArrayList<>();
 
         passiveList.addAll(passives);
-        passiveList.addAll(core.totemManager.getAdditionalPassives(Bukkit.getPlayer(getOwner())));
+        passiveList.addAll(core.getTotemManager().getAdditionalPassives(Bukkit.getPlayer(getOwner())));
 
         return passiveList;
 
@@ -71,7 +71,7 @@ public class Profile {
 
     public RPGClass getRPGClass() {
 
-        return data.containsKey("rpgclass") ? core.rpgClassManager.getRPGClass(data.getString("rpgclass")) : null;
+        return data.containsKey("rpgclass") ? core.getRpgClassManager().getRPGClass(data.getString("rpgclass")) : null;
 
     }
 

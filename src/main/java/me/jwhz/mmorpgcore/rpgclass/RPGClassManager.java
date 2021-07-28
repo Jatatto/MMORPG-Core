@@ -156,7 +156,7 @@ public class RPGClassManager extends Manager<RPGClass> {
     @EventHandler
     public void onLevelUp(PlayerLevelUpEvent e) {
 
-        e.getPlayer().sendMessage(core.messages.levelUp);
+        e.getPlayer().sendMessage(core.getMessages().levelUp);
 
     }
 

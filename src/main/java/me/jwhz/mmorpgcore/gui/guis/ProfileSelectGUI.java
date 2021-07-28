@@ -6,10 +6,9 @@ import me.jwhz.mmorpgcore.gui.GUI;
 import me.jwhz.mmorpgcore.profile.DBPlayer;
 import me.jwhz.mmorpgcore.profile.Profile;
 import me.jwhz.mmorpgcore.response.responses.ChatResponse;
-import me.jwhz.mmorpgcore.rpgclass.RPGClass;
 import me.jwhz.mmorpgcore.utils.ItemFactory;
-import me.jwhz.mmorpgcore.utils.materials.UMaterial;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -24,14 +23,14 @@ public class ProfileSelectGUI extends GUI {
     @ConfigValue("gui.profile select.name")
     String name = "&aSelect a profile";
     @ConfigValue("gui.profile select.items.filler item")
-    ItemStack fillerItem = ItemFactory.build(UMaterial.GRAY_STAINED_GLASS_PANE, "&f");
+    ItemStack fillerItem = ItemFactory.build(Material.GRAY_STAINED_GLASS_PANE, "&f");
 
     @ConfigValue("gui.profile select.items.current profile")
-    ItemStack currentProfile = ItemFactory.build(UMaterial.BOOK, "&aProfile: %mmorpg_<profile>_name%", " ", "&7- &aUUID: %mmorpg_<profile>_uuid%", "", "&aCurrent profile.");
+    ItemStack currentProfile = ItemFactory.build(Material.BOOK, "&aProfile: %mmorpg_<profile>_name%", " ", "&7- &aUUID: %mmorpg_<profile>_uuid%", "", "&aCurrent profile.");
     @ConfigValue("gui.profile select.items.has profile")
-    ItemStack hasProfile = ItemFactory.build(UMaterial.BOOK, "&aProfile: %mmorpg_<profile>_name%", " ", "&7- &aUUID: %mmorpg_<profile>_uuid%", "", "&aClick to change to this profile.");
+    ItemStack hasProfile = ItemFactory.build(Material.BOOK, "&aProfile: %mmorpg_<profile>_name%", " ", "&7- &aUUID: %mmorpg_<profile>_uuid%", "", "&aClick to change to this profile.");
     @ConfigValue("gui.profile select.items.empty profile")
-    ItemStack emptyProfile = ItemFactory.build(UMaterial.WRITABLE_BOOK, "&aEmpty Profile, ", " ", "&7Click to create a new profile.");
+    ItemStack emptyProfile = ItemFactory.build(Material.WRITABLE_BOOK, "&aEmpty Profile, ", " ", "&7Click to create a new profile.");
 
     @ConfigValue("gui.profile select.slots")
     Map<String, String> slots = getDefaultSlots();
@@ -69,9 +68,9 @@ public class ProfileSelectGUI extends GUI {
                     e.setCurrentItem(null);
                     e.getWhoClicked().closeInventory();
 
-                    if (core.playerManager.getMaximumProfiles(player.getPlayer()) > player.getProfiles().size()) {
+                    if (core.getPlayerManager().getMaximumProfiles(player.getPlayer()) > player.getProfiles().size()) {
 
-                        player.sendMessage(core.messages.enterProfileName);
+                        player.sendMessage(core.getMessages().enterProfileName);
 
                         new ChatResponse(player.getPlayer()) {
 
@@ -80,14 +79,14 @@ public class ProfileSelectGUI extends GUI {
 
                                 if (player.getProfile(response) != null) {
 
-                                    player.sendMessage(core.messages.profileAlreadyExists);
+                                    player.sendMessage(core.getMessages().profileAlreadyExists);
                                     return false;
 
                                 }
 
                                 player.createProfile(response);
-                                core.rpgClassManager.addProfileChange(player, player.getProfile(response));
-                                player.sendMessage(core.messages.profileCreated.replace("%profile%", response));
+                                core.getRpgClassManager().addProfileChange(player, player.getProfile(response));
+                                player.sendMessage(core.getMessages().profileCreated.replace("%profile%", response));
 
 
                                 return true;
@@ -97,7 +96,7 @@ public class ProfileSelectGUI extends GUI {
                         }.register();
 
                     } else
-                        player.sendMessage(core.messages.maximumProfilesCreated);
+                        player.sendMessage(core.getMessages().maximumProfilesCreated);
 
                 } else if (!profile.getProfileUUID().equals(player.getCurrentProfile().getProfileUUID()))
                     player.setCurrentProfile(profile);

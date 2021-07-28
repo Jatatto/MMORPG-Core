@@ -71,7 +71,7 @@ public class PlayerStats extends ProfileData {
 
             Objects.requireNonNull(Bukkit.getPlayer(profile.getOwner())).setHealth(Math.min(player.getMaxHealth(), health));
             document.put("health", Math.min(DBPlayer.getPlayer(player).getCurrentProfile().getPlayerStats().getMaxHealth(), health * getHealthScale()));
-            MMORPGCore.getInstance().manaManager.updateBar(player);
+            MMORPGCore.getInstance().getManaManager().updateBar(player);
 
         }
 
@@ -137,7 +137,7 @@ public class PlayerStats extends ProfileData {
     @Override
     public void load(Player player) {
 
-        player.teleport(document.containsKey("location") ? getLocation() : MMORPGCore.getInstance().config.getNewProfileSpawn());
+        player.teleport(document.containsKey("location") ? getLocation() : MMORPGCore.getInstance().getConfigFile().getNewProfileSpawn());
 
         player.setMaxHealth(20.0);
 

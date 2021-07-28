@@ -47,7 +47,7 @@ public class ManaManager extends Manager {
 
             }
 
-            core.totemManager.run();
+            core.getTotemManager().run();
 
         }, 0, 20);
 
@@ -56,7 +56,7 @@ public class ManaManager extends Manager {
     public void updateBar(Player player) {
 
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(new ChatComponentText(
-                PlaceholderAPI.setPlaceholders(player, core.messages.manaBar)
+                PlaceholderAPI.setPlaceholders(player, core.getMessages().manaBar)
         ), ChatMessageType.GAME_INFO));
 
     }

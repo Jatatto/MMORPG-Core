@@ -53,10 +53,10 @@ public class LevelListeners implements Listener {
             armorStand.setCollidable(false);
 
             armorStand.setCustomName(ChatColor.translateAlternateColorCodes('&',
-                    core.config.getDamageHologramText().replace("%damage%", decimalFormat.format(e.getFinalDamage()))
+                    core.getConfigFile().getDamageHologramText().replace("%damage%", decimalFormat.format(e.getFinalDamage()))
             ));
 
-            core.rpgClassManager.addArmorStand(armorStand, System.currentTimeMillis() + (1000));
+            core.getRpgClassManager().addArmorStand(armorStand, System.currentTimeMillis() + (1000));
 
         }
 
@@ -91,7 +91,7 @@ public class LevelListeners implements Listener {
     @EventHandler
     public void onLevelUp(PlayerLevelUpEvent e) {
 
-        e.getPlayer().sendMessage(core.messages.levelUp);
+        e.getPlayer().sendMessage(core.getMessages().levelUp);
 
     }
 

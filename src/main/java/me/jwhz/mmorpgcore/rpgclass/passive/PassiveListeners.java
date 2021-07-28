@@ -27,8 +27,8 @@ public class PassiveListeners implements Listener {
             if (passive instanceof ManaRegenerationPassive)
                 ((EventPassive) passive).handle(e);
 
-        if (MMORPGCore.getInstance().totemManager.hasTotemPlaced(e.getPlayer().getPlayer()) &&
-                !MMORPGCore.getInstance().totemManager.getPlacedTotem(e.getPlayer().getPlayer()).getTotemConfiguration().canRegenerationMana())
+        if (MMORPGCore.getInstance().getTotemManager().hasTotemPlaced(e.getPlayer().getPlayer()) &&
+                !MMORPGCore.getInstance().getTotemManager().getPlacedTotem(e.getPlayer().getPlayer()).getTotemConfiguration().canRegenerationMana())
             e.setCancelled(true);
 
     }

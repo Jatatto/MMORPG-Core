@@ -6,9 +6,9 @@ import me.jwhz.mmorpgcore.gui.GUI;
 import me.jwhz.mmorpgcore.profile.DBPlayer;
 import me.jwhz.mmorpgcore.profile.Profile;
 import me.jwhz.mmorpgcore.utils.ItemFactory;
-import me.jwhz.mmorpgcore.utils.materials.UMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -23,13 +23,13 @@ public class ViewProfileGUI extends GUI {
     String name = "Viewing profile: %profile_name%";
 
     @ConfigValue("gui.view profile.items.filler item")
-    ItemStack fillerItem = ItemFactory.build(UMaterial.GRAY_STAINED_GLASS_PANE, "&f");
+    ItemStack fillerItem = ItemFactory.build(Material.GRAY_STAINED_GLASS_PANE, "&f");
     @ConfigValue("gui.view profile.items.back arrow")
-    ItemStack backArrow = ItemFactory.build(UMaterial.ARROW, "&cBack");
+    ItemStack backArrow = ItemFactory.build(Material.ARROW, "&cBack");
     @ConfigValue("gui.view profile.items.enderchest")
-    ItemStack enderChest = ItemFactory.build(UMaterial.ENDER_CHEST, "&bEnder Chest", "", "&7Click to view enderchest");
+    ItemStack enderChest = ItemFactory.build(Material.ENDER_CHEST, "&bEnder Chest", "", "&7Click to view enderchest");
     @ConfigValue("gui.view profile.items.player info")
-    ItemStack playerInfo = ItemFactory.build(UMaterial.PAPER, "&aPlayer info",
+    ItemStack playerInfo = ItemFactory.build(Material.PAPER, "&aPlayer info",
             "",
             "&7- XP Level: &b%profile_exp_level% (%profile_current_xp% exp)",
             "&7- Location: &b%profile_x%&7, &b%profile_y%&7, &b%profile_z%"

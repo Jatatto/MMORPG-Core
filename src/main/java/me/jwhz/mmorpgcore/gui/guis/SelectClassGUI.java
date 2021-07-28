@@ -6,8 +6,8 @@ import me.jwhz.mmorpgcore.gui.GUI;
 import me.jwhz.mmorpgcore.profile.DBPlayer;
 import me.jwhz.mmorpgcore.rpgclass.RPGClass;
 import me.jwhz.mmorpgcore.utils.ItemFactory;
-import me.jwhz.mmorpgcore.utils.materials.UMaterial;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -25,7 +25,7 @@ public class SelectClassGUI extends GUI {
     @ConfigValue("gui.select class.name")
     String name = "&aSelect a class";
     @ConfigValue("gui.select class.items.filler item")
-    ItemStack fillerItem = ItemFactory.build(UMaterial.GRAY_STAINED_GLASS_PANE, "&f");
+    ItemStack fillerItem = ItemFactory.build(Material.GRAY_STAINED_GLASS_PANE, "&f");
 
     @ConfigValue("gui.select class.slots")
     Map<String, String> slots = getDefaultSlots();
@@ -52,7 +52,7 @@ public class SelectClassGUI extends GUI {
 
             DBPlayer.getPlayer(e.getWhoClicked().getUniqueId()).getCurrentProfile().setRPGClass(rpgClass);
 
-            e.getWhoClicked().sendMessage(core.messages.classSelected.replace("%class%", rpgClass.getClassName()));
+            e.getWhoClicked().sendMessage(core.getMessages().classSelected.replace("%class%", rpgClass.getClassName()));
 
             e.getWhoClicked().closeInventory();
 
@@ -68,7 +68,7 @@ public class SelectClassGUI extends GUI {
         if (dbPlayer != null && dbPlayer.getCurrentProfile() != null && dbPlayer.getCurrentProfile().getRPGClass() == null)
             Bukkit.getScheduler().runTaskLater(core, () -> {
                 new SelectClassGUI((Player) e.getPlayer());
-                e.getPlayer().sendMessage(core.messages.selectClass);
+                e.getPlayer().sendMessage(core.getMessages().selectClass);
             }, 1);
 
     }
@@ -81,9 +81,9 @@ public class SelectClassGUI extends GUI {
 
         for (Map.Entry<String, String> entry : slots.entrySet())
 
-            if (core.rpgClassManager.isRPGClass(entry.getValue())) {
+            if (core.getRpgClassManager().isRPGClass(entry.getValue())) {
 
-                RPGClass rpgClass = core.rpgClassManager.getRPGClass(entry.getValue());
+                RPGClass rpgClass = core.getRpgClassManager().getRPGClass(entry.getValue());
 
                 ItemStack item = ItemFactory.replacePlaceholders(player, rpgClass.getItem());
 

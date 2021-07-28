@@ -8,8 +8,8 @@ import me.jwhz.mmorpgcore.profile.DBPlayer;
 import me.jwhz.mmorpgcore.profile.Profile;
 import me.jwhz.mmorpgcore.rpgclass.levels.Level;
 import me.jwhz.mmorpgcore.utils.ItemFactory;
-import me.jwhz.mmorpgcore.utils.materials.UMaterial;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -40,26 +40,25 @@ public class LevelsGUI extends GUI {
     List<Integer> slots = getDefaultSlots();
 
     @ConfigValue("gui.levels.items.filler item")
-    ItemStack fillerItem = ItemFactory.build(UMaterial.GRAY_STAINED_GLASS_PANE, "&f");
+    ItemStack fillerItem = ItemFactory.build(Material.GRAY_STAINED_GLASS_PANE, "&f");
 
     @ConfigValue("gui.levels.items.next arrow")
-    ItemStack nextArrow = ItemFactory.build(UMaterial.ARROW, "&aNext &7(%current_page%/%max_pages%)");
+    ItemStack nextArrow = ItemFactory.build(Material.ARROW, "&aNext &7(%current_page%/%max_pages%)");
 
     @ConfigValue("gui.levels.items.backArrow arrow")
-    ItemStack backArrow = ItemFactory.build(UMaterial.ARROW, "&cBack &7(%current_page%/%max_pages%)");
+    ItemStack backArrow = ItemFactory.build(Material.ARROW, "&cBack &7(%current_page%/%max_pages%)");
 
     @ConfigValue("gui.levels.items.unlocked level")
-    ItemStack unlockedLevel = ItemFactory.build(UMaterial.BOOK,
+    ItemStack unlockedLevel = ItemFactory.build(Material.BOOK,
             "&2&lLevel: &a%level%",
             "",
             "&aRequirement: &7%requirement%/%requirement%",
             "&eYour total xp: &7%mmorpg_level_totalxp%",
             "",
             "&aPassed."
-
     );
     @ConfigValue("gui.levels.items.next level")
-    ItemStack nextLevel = ItemFactory.fakeGlow(UMaterial.WRITABLE_BOOK,
+    ItemStack nextLevel = ItemFactory.fakeGlow(Material.WRITABLE_BOOK,
             "&6&eLevel: &e%level%",
             " ",
             "&eRequirement: &7%mmorpg_level_currentxp%/%requirement%",
@@ -68,7 +67,7 @@ public class LevelsGUI extends GUI {
             "&eProgressing towards."
     );
     @ConfigValue("gui.levels.items.locked level")
-    ItemStack lockedLevel = ItemFactory.build(UMaterial.WRITABLE_BOOK,
+    ItemStack lockedLevel = ItemFactory.build(Material.WRITABLE_BOOK,
             "&4&c&lLevel: &c%level%",
             " ",
             "&cRequirement: &70/%requirement%",

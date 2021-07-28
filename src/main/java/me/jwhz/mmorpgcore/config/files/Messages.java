@@ -35,6 +35,12 @@ public class Messages extends ConfigFile {
     @ConfigValue("messages.level.level up")
     public String levelUp = "&aYou are now %mmorpg_class% lvl%mmorpg_level%.";
 
+    @ConfigValue("messages.skill cards.skill on cooldown")
+    public String skillOnCooldown = "&a%skill% is currently on cooldown (%cooldown%s).";
+
+    @ConfigValue("messages.skill cards.not enough mana")
+    public String notEnoughMana = "&a";
+
 
     public Messages() {
 

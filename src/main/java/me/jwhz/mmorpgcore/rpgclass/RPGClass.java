@@ -7,7 +7,7 @@ import me.jwhz.mmorpgcore.rpgclass.passive.Passive;
 import me.jwhz.mmorpgcore.rpgclass.passive.PassiveType;
 import me.jwhz.mmorpgcore.utils.BukkitSerialization;
 import me.jwhz.mmorpgcore.utils.ItemFactory;
-import me.jwhz.mmorpgcore.utils.materials.UMaterial;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -39,10 +39,8 @@ public class RPGClass extends ManagerObject<File> {
 
     public ItemStack getItem() {
 
-        if (yamlConfiguration.isSet("gui item"))
-            return BukkitSerialization.convertSection(yamlConfiguration.getConfigurationSection("gui item"));
-
-        return ItemFactory.build(UMaterial.PAPER, getClassName(), "Edited in config....");
+        return yamlConfiguration.isSet("gui item") ? BukkitSerialization.convertSection(yamlConfiguration.getConfigurationSection("gui item")) :
+                ItemFactory.build(Material.PAPER, getClassName(), "Edit in config....");
 
     }
 
@@ -76,12 +74,8 @@ public class RPGClass extends ManagerObject<File> {
                     PassiveType type = PassiveType.getByName(configurationSection.getString("type"));
 
                     try {
-
                         passives.add((Passive) type.getPassiveClass().getConstructor(ConfigurationSection.class).newInstance(configurationSection));
-
-                    } catch (Exception ignore) {
-
-                    }
+                    } catch (Exception ignore) { }
 
                 }
 

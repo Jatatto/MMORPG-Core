@@ -191,10 +191,10 @@ public class DBPlayer extends ManagerObject<UUID> {
 
     public void save() {
 
-        if (core.database.isRegistered(id))
-            core.database.collection.replaceOne(new BasicDBObject("uuid", id.toString()), data);
+        if (core.getDatabase().isRegistered(id))
+            core.getDatabase().collection.replaceOne(new BasicDBObject("uuid", id.toString()), data);
         else
-            core.database.collection.insertOne(data);
+            core.getDatabase().collection.insertOne(data);
 
     }
 
@@ -223,7 +223,7 @@ public class DBPlayer extends ManagerObject<UUID> {
 
     public static DBPlayer getPlayer(UUID id) {
 
-        return MMORPGCore.getInstance().playerManager.getList().stream().filter(dbPlayer -> dbPlayer.id.equals(id)).findFirst().orElse(null);
+        return MMORPGCore.getInstance().getPlayerManager().getList().stream().filter(dbPlayer -> dbPlayer.id.equals(id)).findFirst().orElse(null);
 
     }
 

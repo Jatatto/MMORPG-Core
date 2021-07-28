@@ -45,14 +45,14 @@ public class TotemCMD extends CommandBase {
 
             }
 
-            if (!core.totemManager.isTotemConfiguration(args[2])) {
+            if (!core.getTotemManager().isTotemConfiguration(args[2])) {
 
                 sender.sendMessage("&cCan't find totem configuration.");
                 return;
 
             }
 
-            player.getInventory().addItem(core.totemManager.getTotemConfiguration(args[2]).getItem());
+            player.getInventory().addItem(core.getTotemManager().getTotemConfiguration(args[2]).getItem());
 
             return;
 
